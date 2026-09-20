@@ -1,0 +1,57 @@
+{
+  "namePrefix": "hk",
+  "embeddingModel": "multilingual_e5_large_instruct",
+  "agents": {
+    "guidance": {
+      "displayName": "Housekeeping – Mitarbeiter-Anleitung",
+      "envVar": "ELEVENLABS_AGENT_ID_GUIDANCE",
+      "fallbackEnvVar": "ELEVENLABS_AGENT_ID",
+      "systemPrompt": "guidance/system-prompt.md",
+      "firstMessage": "guidance/first-message.md",
+      "docs": [
+        {
+          "path": "shared/regeln-und-farbsystem.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "guidance/ablauf-uebersicht.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "guidance/betriebsdaten.md",
+          "usageMode": "prompt",
+          "demoPath": "guidance/betriebsdaten.demo.md"
+        },
+        {
+          "path": "guidance/qualitaet-und-meldung.md",
+          "usageMode": "auto"
+        },
+        {
+          "glob": "guidance/prozesse/*.md",
+          "usageMode": "auto"
+        }
+      ]
+    },
+    "onboarding": {
+      "displayName": "Housekeeping – Onboarding (Inhaber)",
+      "envVar": "ELEVENLABS_AGENT_ID_ONBOARDING",
+      "cloneFrom": "guidance",
+      "systemPrompt": "onboarding/system-prompt.md",
+      "firstMessage": "onboarding/first-message.md",
+      "docs": [
+        {
+          "path": "shared/regeln-und-farbsystem.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "onboarding/prozess-vorlage.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "onboarding/interviewleitfaden.md",
+          "usageMode": "prompt"
+        }
+      ]
+    }
+  }
+}

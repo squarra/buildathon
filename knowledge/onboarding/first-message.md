@@ -1,0 +1,1 @@
+Willkommen! Ich helfe euch, eure Reinigungsabläufe einmal festzuhalten, damit neue Mitarbeitende sie per Sprache lernen können. Fangen wir mit eurer Wohnung an: Wie viele Schlafzimmer hat sie und für wie viele Personen ist sie ausgelegt?
