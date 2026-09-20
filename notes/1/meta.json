@@ -1,0 +1,79 @@
+{
+  "schema": "korch.item/1",
+  "item_id": "29.06.26, 13-33.meeting-report",
+  "pipeline": "interpret",
+  "run_id": 32,
+  "produced_at": "2026-06-29T14:43:26.617423+00:00",
+  "contract": "Interpretation/1",
+  "artifact": "29.06.26, 13-33.meeting-report.md",
+  "media": [
+    "29.06.26, 13-33.md",
+    "meeting-report.user.md",
+    "29.06.26, 13-33.wav"
+  ],
+  "params": {
+    "task": "meeting-report",
+    "media": "/Users/matthiassammer/Documents/Projects/knowledge-orchestrator/to-process/29.06.26, 13-33.wav"
+  },
+  "steps": [
+    {
+      "step_id": "transcribe",
+      "module": "speech-to-text",
+      "contract": "Transcript/1",
+      "metadata": {
+        "model": "mlx-community/parakeet-tdt-0.6b-v3",
+        "backend": "parakeet",
+        "language": "unknown",
+        "duration_s": 2849.92,
+        "transcribed": "2026-06-29T16:42:56",
+        "source_url": null,
+        "source_published": null
+      }
+    },
+    {
+      "step_id": "render",
+      "module": null,
+      "contract": null,
+      "metadata": {}
+    },
+    {
+      "step_id": "interpret",
+      "module": "model-gateway",
+      "contract": "Interpretation/1",
+      "metadata": {
+        "source_file": "/Users/matthiassammer/.knowledge-orchestrator/artifacts/7975ef91ae874f6b10bda86f75ff41d086b6325baedc8565e060966739343cfb/29.06.26, 13-33.md",
+        "task": "meeting-report",
+        "model": "gpt-5.2-chat",
+        "format": "markdown",
+        "generated": "2026-06-29T16:42:56",
+        "prompt": "meeting-report",
+        "usage": {
+          "completion_tokens": 2515,
+          "prompt_tokens": 11071,
+          "total_tokens": 13586,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 0
+          },
+          "latency_checkpoint": {
+            "engine_tbt_ms": 11,
+            "engine_ttft_ms": 168,
+            "engine_ttlt_ms": 27037,
+            "pre_inference_ms": 196,
+            "service_tbt_ms": 11,
+            "service_ttft_ms": 532,
+            "service_ttlt_ms": 27355,
+            "total_duration_ms": 27171,
+            "user_visible_ttft_ms": 336
+          }
+        }
+      }
+    }
+  ]
+}
