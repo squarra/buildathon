@@ -69,7 +69,15 @@ Sechs Werkzeuge stehen dem Gespräch zur Verfügung: `wissen_suchen`, `prozess_s
 Einrichtung:
 
 1. Im ElevenLabs-Dashboard einen Agent anlegen. `knowledge/wissnsepp-agent.md` enthält Systemprompt, erste Nachricht und die sechs Tool-Definitionen zum Übernehmen. **Keine** Dokumente in die Wissensbasis des Agents laden – das Wissen kommt aus dieser App.
-2. In `.env.local` hinterlegen: `ELEVENLABS_API_KEY` (Berechtigung *Conversational AI*), `ELEVENLABS_AGENT_ID`, optional `VOICE_DAILY_LIMIT` (Standard 20 Gespräche pro Demo-Arbeitsbereich und Tag).
+2. In `.env.local` hinterlegen: `ELEVENLABS_API_KEY` (Berechtigung *Conversational AI*), `ELEVENLABS_AGENT_ID_GUIDANCE`, optional `VOICE_DAILY_LIMIT` (Standard 20 Gespräche pro Demo-Arbeitsbereich und Tag).
+
+### Der zweite Agent: einen Betrieb im Gespräch einrichten
+
+Das Grundproblem beim Start ist leer: eine Betreiberin hat ihre Abläufe im Kopf, nicht in einem System. Unter **Betrieb einrichten** führt ein zweiter Agent deshalb ein Interview – Farbsystem, Waschprogramme, Mengenregeln, Müll, Zuständigkeiten – und nennt zu jedem Thema den üblichen Standard, damit sie nur bestätigen oder korrigieren muss.
+
+Zwei Werkzeuge genügen ihm: `wissen_festhalten` legt ein bestätigtes Thema als Beitrag an, `punkt_offen` vermerkt, was noch nicht feststeht. Beides schreibt **nicht** direkt ins Hauswissen, sondern ins Postfach: derselbe Freigabeweg wie für eine Meldung aus der Wohnung. Was die Betreiberin dort bestätigt, liest der Wissnsepp anschließend den Mitarbeitenden vor – die Einrichtung füllt also genau die Quelle, aus der der erste Agent antwortet.
+
+Der Server prüft die Rolle, bevor er ein Token prägt: `flow=onboarding` bekommt nur die Betreiberin. Konfiguriert wird der Agent über `ELEVENLABS_AGENT_ID_ONBOARDING`; ohne die Variable bleibt die Ansicht ehrlich stumm. Themenliste und Gesprächsführung stammen aus dem Onboarding-Agent im Branch `voice-feature`, dort aber ohne Anbindung an eine Datenbasis – die Antworten mussten nach dem Gespräch von Hand aus der ElevenLabs-Analyse übertragen werden.
 
 Der Schlüssel verlässt den Server nie: `/api/voice-token` prägt serverseitig ein kurzlebiges WebRTC-Token. Fehlt die Konfiguration, sagt die Sprechtaste das offen, statt ein Gespräch vorzutäuschen.
 
@@ -114,7 +122,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 - Die Quellenanzeigen öffnet das aktuelle Hauswissen; der laufende Prozess behält seinen beim Start gespeicherten Inhalt und seine Prozessversion. Prozesshistorie wird serverseitig bewahrt; eine eigene Historienansicht für Prozesse ist noch nicht enthalten.
 - Prüfbedarf wird beim Öffnen anhand von Daten berechnet; keine E-Mail-/Push-Erinnerungen. Belohnungen sind Demo-Anfragen, keine Auszahlungen.
 - Keine echten Buchungs-, Zahlungs-, Gästekarten- oder Notrufintegrationen.
-- Das Sprachgespräch ist ohne gültigen ElevenLabs-Schlüssel mit *Conversational AI*-Berechtigung nicht live verifiziert. Geprüft sind bisher nur Tokenroute, Tageslimit und das ehrliche Verhalten ohne Konfiguration.
+- Die Sprachgespräche sind ohne gültigen ElevenLabs-Schlüssel mit *Conversational AI*-Berechtigung nicht live verifiziert – weder die Anleitung noch die Einrichtung. Geprüft sind bisher nur Tokenroute inklusive Rollenprüfung für `flow=onboarding`, Tageslimit und das ehrliche Verhalten ohne Konfiguration.
 - 60 KI-Anfragen pro Demo-Arbeitsbereich/Tag. Vor öffentlicher gemeinsamer Key-Nutzung zusätzlich globale Limits und Bot-Schutz vorsehen.
 
 ## Prüfungen

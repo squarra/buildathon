@@ -12,14 +12,19 @@ nextStep:()=>Promise<string>;
 repeatStep:()=>Promise<string>;
 report:(titel:string,beschreibung:string)=>Promise<string>;
 roomCheck:()=>Promise<string>;
+// Nur für die Einrichtung im Gespräch: was die Betreiberin bestätigt, landet als
+// Beitrag im Postfach und wird von ihr wie jeder andere Beitrag freigegeben.
+record?:(thema:string,inhalt:string)=>Promise<string>;
+openPoint?:(thema:string)=>Promise<string>;
 };
+export type VoiceFlow='guidance'|'onboarding';
 export type VoiceLine={id:number;who:'user'|'agent';text:string;tentative?:boolean};
 
-export function VoicePanel(props:{tools:VoiceTools;unit:string;role:string;lang:string;context:string}){
+export function VoicePanel(props:{tools:VoiceTools;unit:string;role:string;lang:string;context:string;flow?:VoiceFlow}){
 return <ConversationProvider><VoiceInner {...props}/></ConversationProvider>;
 }
 
-function VoiceInner({tools,unit,role,lang,context}:{tools:VoiceTools;unit:string;role:string;lang:string;context:string}){
+function VoiceInner({tools,unit,role,lang,context,flow='guidance'}:{tools:VoiceTools;unit:string;role:string;lang:string;context:string;flow?:VoiceFlow}){
 const {startSession,endSession,getOutputByteFrequencyData,getInputVolume}=useConversationControls();
 const {status,message}=useConversationStatus();
 const {isSpeaking}=useConversationMode();
@@ -39,6 +44,8 @@ useConversationClientTool('naechster_schritt',async()=>tools.nextStep());
 useConversationClientTool('schritt_wiederholen',async()=>tools.repeatStep());
 useConversationClientTool('problem_melden',async(p:any)=>tools.report(String(p?.titel||'Meldung'),String(p?.beschreibung||'')));
 useConversationClientTool('zimmer_check',async()=>tools.roomCheck());
+useConversationClientTool('wissen_festhalten',async(p:any)=>tools.record?await tools.record(String(p?.thema||''),String(p?.inhalt||'')):'Dieses Gespräch kann kein Wissen festhalten.');
+useConversationClientTool('punkt_offen',async(p:any)=>tools.openPoint?await tools.openPoint(String(p?.thema||'')):'Dieses Gespräch kann keine offenen Punkte notieren.');
 
 useEffect(()=>{if(lines.length)end.current?.scrollIntoView({behavior:'smooth',block:'nearest'});},[lines]);
 // Der Ring atmet mit der Stimme – so sieht man auf zwei Meter Abstand, wer gerade spricht.
@@ -46,7 +53,7 @@ useEffect(()=>{if(!live)return setLevel(0);let raf=0;const tick=()=>{try{if(isSp
 
 async function start(){setError('');setStarting(true);try{
 await navigator.mediaDevices.getUserMedia({audio:true});
-const r=await fetch('/api/voice-token');const d=await r.json();
+const r=await fetch(`/api/voice-token?flow=${flow}`);const d=await r.json();
 if(!r.ok)throw Error(d.error||'Verbindung fehlgeschlagen.');
 setLines([]);
 startSession({conversationToken:d.token,connectionType:'webrtc',
@@ -56,7 +63,8 @@ onError:(e:any)=>setError(typeof e==='string'?e:e?.message||'Die Verbindung wurd
 }catch(e:any){setError(e?.name==='NotAllowedError'?'Für das Gespräch bitte den Zugriff auf das Mikrofon erlauben.':e.message);}finally{setStarting(false);}}
 
 const state=starting||status==='connecting'?'connecting':status==='connected'?(isSpeaking?'speaking':'listening'):'idle';
-const labels:Record<string,[string,string]>={idle:['Tippe auf das Mikrofon','Tap the microphone'],connecting:['Verbinde …','Connecting …'],listening:['Ich höre zu','I am listening'],speaking:['Der Wissnsepp spricht','Wissnsepp is speaking']};
+const speaker=flow==='onboarding'?['Die Einrichtung läuft','Setup assistant is speaking']:['Der Wissnsepp spricht','Wissnsepp is speaking'];
+const labels:Record<string,[string,string]>={idle:['Tippe auf das Mikrofon','Tap the microphone'],connecting:['Verbinde …','Connecting …'],listening:['Ich höre zu','I am listening'],speaking:[speaker[0],speaker[1]]};
 const label=labels[state][lang==='en'?1:0];
 
 return <section className="voice-panel">
@@ -68,7 +76,7 @@ return <section className="voice-panel">
 </button>
 </div>
 <div className="voice-status">{state==='speaking'?<Volume2 size={17}/>:state==='listening'?<Ear size={17}/>:null}<strong>{label}</strong></div>
-<p className="voice-hint">{live?(lang==='en'?'Just talk. Say “next step” to continue or ask anything about this apartment.':'Sprich einfach. Sag „weiter“ für den nächsten Schritt oder frag, was du wissen willst.'):(lang==='en'?`Answers come from the approved knowledge for ${unit}.`:`Antworten kommen aus dem bestätigten Wissen für ${unit}.`)}</p>
+<p className="voice-hint">{flow==='onboarding'?(live?'Erzähl einfach, wie es bei euch läuft. Was du bestätigst, landet als Beitrag im Postfach.':`Ein Gespräch, dann steht der erste Stand für ${unit}. Nichts wird ohne deine Freigabe zu Hauswissen.`):live?(lang==='en'?'Just talk. Say “next step” to continue or ask anything about this apartment.':'Sprich einfach. Sag „weiter“ für den nächsten Schritt oder frag, was du wissen willst.'):(lang==='en'?`Answers come from the approved knowledge for ${unit}.`:`Antworten kommen aus dem bestätigten Wissen für ${unit}.`)}</p>
 {(error||message)&&<div className="voice-error"><AlertCircle size={17}/>{error||message}</div>}
 {lines.length>0&&<div className="voice-transcript">{lines.map(l=><div key={l.id} className={`voice-line ${l.who}`}>{l.text}</div>)}<div ref={end}/></div>}
 </section>;
