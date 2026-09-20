@@ -18,20 +18,24 @@ ElevenLabs' Knowledge Base ist RAG: Dokumente werden in Chunks zerlegt und nach 
 
 Der Output des Onboarding-Agenten (Data-Collection-Felder, siehe `onboarding/data-collection.md`) füllt genau die Lücken in `guidance/betriebsdaten.md`.
 
+## Sprachen
+
+Standard ist Deutsch; zusätzlich Türkisch, Slowakisch und Ungarisch (`additionalLanguages` in `manifest.json`). Umsetzung: das ElevenLabs-System-Tool `language_detection` ist aktiv, d. h. der Agent erkennt die Sprache am ersten Satz der Person und wechselt ASR und TTS sofort. Die Wissensbasis bleibt deutsch – das LLM übersetzt beim Antworten, das mehrsprachige Embedding-Modell findet die deutschen Chunks auch zu türkischen/slowakischen/ungarischen Fragen. Die erste Begrüßung ist deutsch (sie kommt vor der Erkennung); pro Sprache gibt es ein Language-Preset mit übersetzter Begrüßung (`first-message.<lang>.md`) für den Fall, dass die Sprache später explizit aus der App vorgegeben wird. Neue Sprache: Code in `additionalLanguages` eintragen, optional `first-message.<lang>.md` anlegen, Prompt-Abschnitt „Sprache" ergänzen, `npm run sync-kb`.
+
 ## Dateien
 
 | Datei | Agent | Modus | Handbuch |
 |---|---|---|---|
 | `shared/regeln-und-farbsystem.md` | beide | prompt | §3, §4 |
 | `guidance/system-prompt.md` | guidance | Systemprompt | – |
-| `guidance/first-message.md` | guidance | Begrüßung | – |
+| `guidance/first-message.md`, `.tr/.sk/.hu.md` | guidance | Begrüßung (+ Presets) | – |
 | `guidance/ablauf-uebersicht.md` | guidance | prompt | §6 Titel, §11 |
 | `guidance/betriebsdaten.md` | guidance | prompt | §2.3, §12 (Platzhalter) |
 | `guidance/betriebsdaten.demo.md` | guidance | prompt (mit `--demo`) | dito, mit Demo-Werten |
 | `guidance/qualitaet-und-meldung.md` | guidance | auto | §5, §7, §8, P19 |
 | `guidance/prozesse/01…19-*.md` | guidance | auto | §6 Prozess 1–19 |
 | `onboarding/system-prompt.md` | onboarding | Systemprompt | – |
-| `onboarding/first-message.md` | onboarding | Begrüßung | – |
+| `onboarding/first-message.md`, `.tr/.sk/.hu.md` | onboarding | Begrüßung (+ Presets) | – |
 | `onboarding/prozess-vorlage.md` | onboarding | prompt | §6 komprimiert + Varianten |
 | `onboarding/interviewleitfaden.md` | onboarding | prompt | §2.3, §12 als Fragen |
 | `onboarding/data-collection.md` | onboarding | manuell im Dashboard | §2.3, §12 als Felder |
@@ -58,7 +62,7 @@ npm run probe                        # beide Agenten
 npm run probe -- guidance
 ```
 
-Schickt die Testfragen aus `web/scripts/probe-agents.mts` (Farbsystem, falsches Tuch, Einstieg mitten im Ablauf, Betriebsdaten, Schaden, Abschweifen im Onboarding) über die Simulations-API an die Live-Agenten und druckt die Antworten. Nach jeder Prompt-Änderung: sync, dann probe.
+Schickt die Testfragen aus `web/scripts/probe-agents.mts` (Farbsystem, falsches Tuch, Einstieg mitten im Ablauf, Betriebsdaten, Schaden, Abschweifen im Onboarding, je ein Fall auf Türkisch, Slowakisch und Ungarisch) über die Simulations-API an die Live-Agenten und druckt die Antworten. Nach jeder Prompt-Änderung: sync, dann probe.
 
 ## Manuell im Dashboard
 

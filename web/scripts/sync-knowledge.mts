@@ -19,6 +19,7 @@ import type {
   DocumentUsageModeEnum,
   EmbeddingModelEnum,
   KnowledgeBaseLocator,
+  LanguagePresetInput,
 } from "@elevenlabs/elevenlabs-js/api";
 
 type DocEntry =
@@ -28,6 +29,8 @@ type DocEntry =
 type Manifest = {
   namePrefix: string;
   embeddingModel: EmbeddingModelEnum;
+  defaultLanguage: string;
+  additionalLanguages: string[]; // auto-detected via the language_detection system tool
   agents: Record<
     string,
     {
@@ -198,19 +201,48 @@ for (const agent of agentNames) {
     usageMode: d.usageMode,
   }));
 
+  const firstMessage = readFileSync(join(knowledgeDir, cfg.firstMessage), "utf8").trim();
+
+  // One preset per extra language: same agent, translated greeting when a
+  // conversation starts in that language (first-message.<lang>.md, else German).
+  const languagePresets: Record<string, LanguagePresetInput> = {};
+  for (const lang of manifest.additionalLanguages) {
+    const translated = cfg.firstMessage.replace(/\.md$/, `.${lang}.md`);
+    const path = join(knowledgeDir, translated);
+    languagePresets[lang] = {
+      overrides: {
+        agent: {
+          language: lang,
+          firstMessage: existsSync(path) ? readFileSync(path, "utf8").trim() : firstMessage,
+        },
+      },
+    };
+  }
+
   // merge into the existing config so LLM/voice settings from the dashboard survive
   const current = await client.conversationalAi.agents.get(agentId);
   const prompt = current.conversationConfig.agent?.prompt ?? {};
   await client.conversationalAi.agents.update(agentId, {
     conversationConfig: {
+      languagePresets,
       agent: {
         ...current.conversationConfig.agent,
-        language: "de",
-        firstMessage: readFileSync(join(knowledgeDir, cfg.firstMessage), "utf8").trim(),
+        language: manifest.defaultLanguage,
+        firstMessage,
         prompt: {
           ...prompt,
           prompt: readFileSync(join(knowledgeDir, cfg.systemPrompt), "utf8"),
           knowledgeBase,
+          builtInTools: {
+            ...prompt.builtInTools,
+            // lets the agent switch ASR/TTS language mid-conversation
+            languageDetection: {
+              name: "language_detection",
+              description:
+                "Sofort aufrufen, sobald die Person in einer anderen Sprache spricht als der aktuellen (Deutsch, Türkisch, Slowakisch, Ungarisch). Nicht nachfragen, einfach wechseln.",
+              params: { systemToolType: "language_detection" },
+            },
+          },
           rag: {
             ...prompt.rag,
             enabled: true,
@@ -220,7 +252,9 @@ for (const agent of agentNames) {
       },
     },
   });
-  console.log(`✓ ${agent} (${agentId}): ${knowledgeBase.length} docs attached`);
+  console.log(
+    `✓ ${agent} (${agentId}): ${knowledgeBase.length} docs attached, languages ${manifest.defaultLanguage}+${manifest.additionalLanguages.join("/")}`
+  );
 }
 
 // --- 4. kick off RAG indexing for auto-mode docs ---------------------------

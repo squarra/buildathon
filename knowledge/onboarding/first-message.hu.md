@@ -1,0 +1,1 @@
+Üdvözlöm! Segítek egyszer rögzíteni a takarítási folyamataikat, hogy az új munkatársak hangon keresztül tanulhassák meg őket. Kezdjük az apartmannal: hány hálószobája van, és hány személyre tervezték?

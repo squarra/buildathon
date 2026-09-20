@@ -61,6 +61,7 @@ A **voice-first assistant for small hospitality businesses** (hotels, holiday ap
 - **Two ElevenLabs agents, one per flow:** *guidance* (staff, step-by-step Abreisereinigung) and *onboarding* (owner interview). Same voice/LLM/security, different prompt + knowledge base.
 - **Onboarding proposes from a template:** the agent proposes the generic 19-process landscape and only asks the owner to confirm/correct; the handbook's "zu bestätigen" items are the interview script.
 - **Knowledge base layout:** `knowledge/` holds the agent-ready German docs derived from the handbook; always-on rules/sequence/Betriebsdaten in usage mode `prompt`, one RAG doc per process in mode `auto`. `web/scripts/sync-knowledge.mts` pushes it; `web/scripts/probe-agents.mts` tests it. See `knowledge/README.md`.
+- **Languages:** German default plus Turkish, Slovak, Hungarian via ElevenLabs `language_detection` (auto-switch on the user's first sentence); knowledge base stays German, LLM translates. Verified with text probes 2026-09-20.
 - **Betriebsdaten** (quantities, wash programmes, waste, contacts) ship as placeholders (`noch nicht festgelegt`) and as a demo-filled variant (`--demo`); the agent never invents values.
 
 **Action items from the meeting:**
@@ -108,7 +109,7 @@ Language: the team and target market are German-speaking; the agent should likel
 2. Which flows are in the demo: onboarding, staff guidance, feedback, check-up — or a subset.
 3. Is the map feature in scope?
 4. Vercel account / hosting; project folder location.
-5. Agent language (German vs. English) and persona.
+5. ~~Agent language and persona~~ → German + tr/sk/hu auto-detect; personas in `knowledge/*/system-prompt.md` (decided 2026-09-20).
 6. ~~Where does the structured knowledge live during the demo~~ → ElevenLabs knowledge base, source files in `knowledge/` (decided 2026-09-20). Still open: automating the hop from onboarding data-collection output into `guidance/betriebsdaten.md` (manual for the demo).
 
 ## 9. Sources

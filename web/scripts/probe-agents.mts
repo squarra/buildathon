@@ -30,6 +30,9 @@ const PROBES: Record<string, { envVar: string; cases: { name: string; user: stri
       { name: "Betriebsdaten", user: ["Welches Waschprogramm nehme ich für die Handtücher?"] },
       { name: "Schaden", user: ["Ich hab einen Wasserfleck an der Decke im Bad."] },
       { name: "Separates WC", user: ["Was muss alles im separaten WC sein?"] },
+      { name: "Türkisch", user: ["Mutfak için hangi bezi kullanmalıyım?"] },
+      { name: "Slowakisch", user: ["Spálňa jeden je hotová, čo teraz?"] },
+      { name: "Ungarisch", user: ["Vízfoltot találtam a fürdőszoba mennyezetén."] },
     ],
   },
   onboarding: {
@@ -38,6 +41,7 @@ const PROBES: Record<string, { envVar: string; cases: { name: string; user: stri
       { name: "Erste Antwort", user: ["Zwei Schlafzimmer, maximal sechs Leute, mit Terrasse."] },
       { name: "Weiß nicht", user: ["Zwei Schlafzimmer, sechs Leute.", "Ja, Farben nehmen wir genauso.", "Waschprogramm weiß ich ehrlich gesagt nicht."] },
       { name: "Abschweifen", user: ["Zwei Schlafzimmer.", "Beim Check-in erklären wir den Gästen immer die Skipässe, soll ich das auch erzählen?"] },
+      { name: "Ungarisch", user: ["Két hálószoba, legfeljebb hat fő, terasszal."] },
     ],
   },
 };
@@ -71,11 +75,16 @@ for (const [agent, spec] of Object.entries(PROBES)) {
         },
         partialConversationHistory: history,
       },
-      newTurnsLimit: 1,
+      // a language switch costs two tool turns before the spoken reply
+      newTurnsLimit: 3,
     });
-    const reply = res.simulatedConversation
-      .slice(history.length)
-      .find((t) => t.role === "agent")?.message;
-    console.log(`\n▸ ${c.name}\n  👤 ${c.user[c.user.length - 1]}\n  🤖 ${reply ?? "(no agent turn)"}`);
+    const turns = res.simulatedConversation.slice(history.length);
+    const reply = turns.find((t) => t.role === "agent" && t.message)?.message;
+    const switched = turns
+      .flatMap((t) => t.toolCalls ?? [])
+      .find((tc) => tc.toolName === "language_detection");
+    console.log(`\n▸ ${c.name}\n  👤 ${c.user[c.user.length - 1]}`);
+    if (switched) console.log(`  ⇄ language_detection ${switched.paramsAsJson}`);
+    console.log(`  🤖 ${reply ?? "(no agent turn)"}`);
   }
 }

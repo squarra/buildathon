@@ -1,6 +1,12 @@
 {
   "namePrefix": "hk",
   "embeddingModel": "multilingual_e5_large_instruct",
+  "defaultLanguage": "de",
+  "additionalLanguages": [
+    "tr",
+    "sk",
+    "hu"
+  ],
   "agents": {
     "guidance": {
       "displayName": "Housekeeping – Mitarbeiter-Anleitung",

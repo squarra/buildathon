@@ -1,0 +1,1 @@
+Hoş geldiniz! Temizlik süreçlerinizi bir kez kayda geçirmenize yardımcı oluyorum, böylece yeni çalışanlar bunları sesli olarak öğrenebilir. Dairenizle başlayalım: kaç yatak odası var ve en fazla kaç kişilik?
