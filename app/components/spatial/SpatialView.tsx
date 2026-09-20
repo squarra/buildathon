@@ -6,6 +6,7 @@ import type {Pin,Point,PinDraft} from '@/lib/spatial/types';
 import {roomAt} from '@/lib/spatial/geometry';
 import FloorPlanMap from './FloorPlanMap';
 import ProcessPanel from './ProcessPanel';
+import GuidancePanel from './GuidancePanel';import FeedbackForm from './FeedbackForm';
 type Mode={kind:'map'}|{kind:'guide';sessionId:string}|{kind:'feedback';sessionId:string}|{kind:'edit'};
 type Props={state:ClientState;role:Role;busy:boolean;action:(body:any,success?:string)=>Promise<ClientState|undefined>};
 export default function SpatialView({state,role,busy,action}:Props){
@@ -36,7 +37,8 @@ if(!plan)return <div className="sp"><p className="muted">Für diese Wohnung ist 
 const heading=mode.kind==='edit'?{kicker:'WISSEN FÜR DEIN TEAM',title:'Dein Wissen bekommt einen Platz.',sub:'Platziere einen Pin dort, wo dein Team das Wissen braucht.'}:mode.kind==='guide'&&session?{kicker:'DEINE BEGLEITUNG VOR ORT',title:session.title,sub:'Die Anleitung bleibt mit dem Ort auf der Karte verbunden.'}:{kicker:'DEIN WISSEN VOR ORT',title:'Ein Ort. Die richtigen Handgriffe.',sub:'Wähle einen Pin und finde die Abläufe, die du hier brauchst.'};
 let panel:React.ReactNode;
 /* TASK 7: edit panel */
-/* TASK 6: guide + feedback panels */
+if(mode.kind==='guide'&&session&&sessionPin)panel=<GuidancePanel session={session} pin={sessionPin} room={roomOf(sessionPin)} busy={busy} onNext={()=>stepOp('next')} onRepeat={()=>setRepeatKey(k=>k+1)} onExit={()=>stepOp('exit')} voice={null}/>;
+else if(mode.kind==='feedback'&&session&&sessionPin)panel=<FeedbackForm session={session} pin={sessionPin} busy={busy} onSubmit={sendFeedback} onSkip={()=>setMode({kind:'map'})}/>;
 if(!panel)panel=selected?<ProcessPanel pin={selected} room={roomOf(selected)} processes={selected.processIds.map(processOf).filter(Boolean) as Process[]} feedback={role==='owner'?state.feedback.filter(f=>f.pinId===selected.id).map(f=>({...f,processTitle:processOf(f.processId)?.title||'Prozess'})):[]} owner={role==='owner'} busy={busy} onStart={startGuidance} onEdit={()=>openEditor(selected)}/>:<p className="muted">Wähle einen Pin auf der Karte.</p>;
 return <div className="sp">
 <div className="page-heading"><div><span className="eyebrow">{heading.kicker}</span><h1>{heading.title}</h1><p>{heading.sub}</p></div>{role==='owner'&&mode.kind==='map'&&<button className="button primary" disabled={busy} onClick={()=>openEditor()}><Plus size={18}/>Pin anlegen</button>}</div>
