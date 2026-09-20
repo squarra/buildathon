@@ -25,6 +25,12 @@ Der Schlüssel wird verschlüsselt serverseitig gespeichert und nie an den Brows
 
 Alternativ kann `MISTRAL_API_KEY` in `.env.local` hinterlegt werden. Modellnamen lassen sich über die Variablen aus `.env.example` konfigurieren. Getestet werden kann ein Schlüssel über die Modelle-API; die tatsächliche Nutzbarkeit der Chat-, Audio- und OCR-Modelle hängt vom Konto ab.
 
+## ElevenLabs verbinden (Sprachanleitung in der Karte)
+
+`ELEVENLABS_API_KEY` und `ELEVENLABS_AGENT_ID` in `.env.local` setzen (siehe `.env.example`). Die Agent-Konfiguration steht in `docs/elevenlabs-agent.md`. Beide Werte bleiben serverseitig; der Browser erhält nur ein kurzlebiges Sitzungs-Token. Ohne die Werte zeigt die Anleitung „Demo-Modus“ mit manuellen Bedienelementen und optionaler Browser-Sprachausgabe.
+
+Die Karte nutzt denselben Demo-Arbeitsbereich wie der Rest der App: lokal pro Browser (`.data/`). Sollen Betreiberin und Team auf verschiedenen Geräten dieselben Pins sehen, ist das Supabase-Hosting (unten) nötig.
+
 ## Eine Demo in drei Minuten
 
 1. **Betreiberin / Übersicht:** „Fenstergriff wurde repariert“ öffnen. Den gemeldeten Sachverhalt im Beispiel als geprüft annehmen, den endgültigen Text formulieren und veröffentlichen.
@@ -65,6 +71,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 - Punkte mit idempotenter Buchung und Beispielbelohnungen.
 - Verschlüsselte, austauschbare Mistral-Verbindung.
 - Zwei optionale WebMCP-Werkzeuge zum Lesen freigegebener Einträge und Öffnen eines Beitragsentwurfs.
+- Karte („Hauswissen vor Ort“): Grundriss mit Pins, ortsbezogene Prozesse, Schritt-für-Schritt-Anleitung mit optionaler ElevenLabs-Sprachbegleitung, Feedback an die Betreiberin. Ohne ElevenLabs-Zugangsdaten läuft ein gekennzeichneter Demo-Modus.
 
 ## Bewusste Grenzen
 
@@ -76,6 +83,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 - Die Quellenanzeigen öffnet das aktuelle Hauswissen; der laufende Prozess behält seinen beim Start gespeicherten Inhalt und seine Prozessversion. Prozesshistorie wird serverseitig bewahrt; eine eigene Historienansicht für Prozesse ist noch nicht enthalten.
 - Prüfbedarf wird beim Öffnen anhand von Daten berechnet; keine E-Mail-/Push-Erinnerungen. Belohnungen sind Demo-Anfragen, keine Auszahlungen.
 - Keine echten Buchungs-, Zahlungs-, Gästekarten- oder Notrufintegrationen.
+- Karte: ein Beispiel-Grundriss (Alpenblick), Möbel schematisch; keine Grundriss-Zeichenwerkzeuge, keine Indoor-Ortung, keine Routen. Die Live-Sprachverbindung ist ohne hinterlegte ElevenLabs-Zugangsdaten nicht verifiziert.
 - 60 KI-Anfragen pro Demo-Arbeitsbereich/Tag. Vor öffentlicher gemeinsamer Key-Nutzung zusätzlich globale Limits und Bot-Schutz vorsehen.
 
 ## Prüfungen
@@ -84,6 +92,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 npm test
 node tests/api-smoke.mjs
 node tests/upload-smoke.mjs
+node tests/spatial-smoke.mjs
 npm run build
 ```
 
