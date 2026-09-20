@@ -1,0 +1,73 @@
+{
+  "schema": "korch.item/1",
+  "item_id": "20.09.26, 10-08.meeting-report",
+  "pipeline": "interpret",
+  "run_id": 188,
+  "produced_at": "2026-09-20T08:52:47.151772+00:00",
+  "contract": "Interpretation/1",
+  "artifact": "20.09.26, 10-08.meeting-report.md",
+  "media": [
+    "20.09.26, 10-08.md",
+    "meeting-report.user.md",
+    "20.09.26, 10-08.wav"
+  ],
+  "params": {
+    "model_id": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+    "task": "meeting-report",
+    "media": "/Users/matthiassammer/Documents/Projects/knowledge-orchestrator/to-process/20.09.26, 10-08.wav",
+    "timeout": "",
+    "region": "eu-central-1",
+    "temperature": "",
+    "max_tokens": ""
+  },
+  "prompt_hash": "7a6bbfa8f858da37f4cd265e7598e6f4aa700279300d1bae4d149582da1240eb",
+  "steps": [
+    {
+      "step_id": "transcribe",
+      "module": "speech-to-text",
+      "contract": "Transcript/1",
+      "metadata": {
+        "model": "mlx-community/parakeet-tdt-0.6b-v3",
+        "backend": "parakeet",
+        "language": "unknown",
+        "duration_s": 402.76,
+        "transcribed": "2026-09-20T10:52:28",
+        "source_url": null,
+        "source_published": null
+      }
+    },
+    {
+      "step_id": "render",
+      "module": null,
+      "contract": null,
+      "metadata": {
+        "prompt_hash": "7a6bbfa8f858da37f4cd265e7598e6f4aa700279300d1bae4d149582da1240eb",
+        "task": "meeting-report",
+        "template": "meeting-report.md",
+        "system_source": "registry",
+        "temperature": "0.0",
+        "max_tokens": null,
+        "model_id": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+        "timeout": "600"
+      }
+    },
+    {
+      "step_id": "interpret",
+      "module": "model-gateway",
+      "contract": "Interpretation/1",
+      "metadata": {
+        "source_file": "/Users/matthiassammer/.knowledge-orchestrator/artifacts/cb3d859075ab3408c1f27a3549eb5ccfbcc117c3786b47f2a60d1bd9dd14cb3b/20.09.26, 10-08.md",
+        "task": "meeting-report",
+        "model": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+        "format": "markdown",
+        "generated": "2026-09-20T10:52:29",
+        "prompt": "meeting-report",
+        "usage": {
+          "prompt_tokens": 3211,
+          "completion_tokens": 1043,
+          "total_tokens": 4254
+        }
+      }
+    }
+  ]
+}
