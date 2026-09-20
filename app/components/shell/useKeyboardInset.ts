@@ -1,0 +1,4 @@
+'use client';
+import {useEffect} from 'react';
+/* iOS Safari does not shrink the layout viewport for the on-screen keyboard; derive the inset from visualViewport. */
+export function useKeyboardInset(){useEffect(()=>{const vv=window.visualViewport;if(!vv)return;const root=document.documentElement;const update=()=>{const inset=vv.scale>1.01?0:Math.max(0,Math.round(window.innerHeight-vv.height-vv.offsetTop));root.style.setProperty('--kb-inset',`${inset}px`);root.toggleAttribute('data-keyboard',inset>0);if(inset>0&&window.scrollY)window.scrollTo(0,0);};vv.addEventListener('resize',update);vv.addEventListener('scroll',update);update();return()=>{vv.removeEventListener('resize',update);vv.removeEventListener('scroll',update);root.style.removeProperty('--kb-inset');root.removeAttribute('data-keyboard');};},[]);}

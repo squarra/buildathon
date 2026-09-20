@@ -13,12 +13,14 @@ npm run dev
 
 Die Anwendung läuft unter http://localhost:3000. In diesem Arbeitsbereich ist sie bereits eingerichtet.
 
+Die Oberfläche ist als iOS-App gestaltet: Am Desktop erscheint sie in einem iPhone-Rahmen (verkleinert sich bei kleinen Fenstern), auf echten Smartphones füllt sie den Bildschirm ohne Rahmen und berücksichtigt die Safe Areas. Navigation über die Tableiste unten (Übersicht bzw. KI-Buddy · Karte · Hauswissen · Prozesse · Mehr); Details und Formulare öffnen sich als Bottom Sheets; die Demorolle wird über das Avatar-Symbol oben rechts gewechselt.
+
 Ohne externe Dienste werden Daten serverseitig unter `.data/` gespeichert. Die Dateien werden atomar geschrieben; Änderungen bleiben nach Neuladen und Neustart erhalten. Das Sitzungscookie verbindet den Browser mit seinem isolierten Demo-Arbeitsbereich. Ein anderer Browser bekommt einen eigenen Betrieb. Dies ist absichtlich kein gemeinsamer produktiver Mandant.
 
 ## Mistral verbinden
 
-1. Oben rechts „Lena · Betreiberin“ auswählen.
-2. „Einstellungen“ öffnen.
+1. Über das Avatar-Symbol oben rechts „Lena · Betreiberin“ auswählen.
+2. „Mehr“ → „Einstellungen“ öffnen.
 3. Mistral-Key im Passwortfeld eintragen und „Verbindung prüfen & speichern“ wählen.
 
 Der Schlüssel wird verschlüsselt serverseitig gespeichert und nie an den Browser zurückgegeben. Lokal wird dafür eine Schlüsseldatei mit eingeschränkten Dateirechten erzeugt. Ohne Mistral-Verbindung funktioniert eine ausdrücklich gekennzeichnete Textsuche. Die Demo-Abläufe sind auch ohne KI ausführbar. Neue Durchläufe enthalten englische Übersetzungen der unveränderten Beispieldaten; Übersetzungen eigener oder geänderter Inhalte benötigen Mistral.
@@ -60,7 +62,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 
 ## Was bereits funktioniert
 
-- Zwei verbundene Oberflächen mit responsive gestaltetem Buddy.
+- iOS-artige Oberfläche mit Tableiste, Navigationsleiste, Bottom Sheets und Action Sheet; am Desktop im iPhone-Rahmen, mobil bildschirmfüllend.
 - Drei Demorollen, serverseitig gefilterte Inhalte und Aktionen.
 - Wissensbeiträge, Prüfung, Freigabe und Versionshistorie.
 - Individuelle Prozessschritte, versionierte Durchläufe und gespeicherter Fortschritt.

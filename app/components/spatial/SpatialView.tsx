@@ -1,10 +1,12 @@
 'use client';
-import {useMemo,useState} from 'react';
+import {useEffect,useMemo,useState,CSSProperties} from 'react';
 import {MapPin,Plus} from 'lucide-react';
 import type {ClientState,Role,Process} from '@/lib/types';
 import type {Pin,Point,PinDraft} from '@/lib/spatial/types';
 import {roomAt} from '@/lib/spatial/geometry';
 import FloorPlanMap from './FloorPlanMap';
+import Sheet,{type Detent} from '../shell/Sheet';
+const PEEK=200; /* grabber + head + pin identity + first process row */
 import ProcessPanel from './ProcessPanel';
 import PinEditor from './PinEditor';
 import GuidancePanel from './GuidancePanel';import FeedbackForm from './FeedbackForm';import VoiceSession from './VoiceSession';
@@ -21,6 +23,8 @@ const [draft,setDraft]=useState<PinDraft>();
 const [placing,setPlacing]=useState(false);
 const [status,setStatus]=useState<{text:string;error?:boolean}>({text:''});
 const [repeatKey,setRepeatKey]=useState(0);
+const [detent,setDetent]=useState<Detent>('peek');
+useEffect(()=>{setDetent(mode.kind==='map'?'peek':mode.kind==='edit'&&placing?'peek':'full');},[mode.kind,placing]);
 const selected=pins.find(p=>p.id===selectedId);
 const roomOf=(pin?:{roomId:string})=>rooms.find(r=>r.id===pin?.roomId);
 const processOf=(id:string)=>state.processes.find(p=>p.id===id);
@@ -41,14 +45,14 @@ if(mode.kind==='edit'&&draft)panel=<PinEditor draft={draft} room={draftRoom} pro
 if(mode.kind==='guide'&&session&&sessionPin)panel=<GuidancePanel session={session} pin={sessionPin} room={roomOf(sessionPin)} busy={busy} onNext={()=>stepOp('next')} onRepeat={()=>setRepeatKey(k=>k+1)} onExit={()=>stepOp('exit')} voice={<VoiceSession key={session.id} session={session} pin={sessionPin} room={roomOf(sessionPin)} repeatKey={repeatKey} onNext={()=>stepOp('next')} onExit={()=>stepOp('exit')}/>}/>;
 else if(mode.kind==='feedback'&&session&&sessionPin)panel=<FeedbackForm session={session} pin={sessionPin} busy={busy} onSubmit={sendFeedback} onSkip={()=>setMode({kind:'map'})}/>;
 if(!panel)panel=selected?<ProcessPanel pin={selected} room={roomOf(selected)} processes={selected.processIds.map(processOf).filter(Boolean) as Process[]} feedback={role==='owner'?state.feedback.filter(f=>f.pinId===selected.id).map(f=>({...f,processTitle:processOf(f.processId)?.title||'Prozess'})):[]} owner={role==='owner'} busy={busy} onStart={startGuidance} onEdit={()=>openEditor(selected)}/>:<p className="muted">Wähle einen Pin auf der Karte.</p>;
-return <div className="sp">
-<div className="page-heading"><div><span className="eyebrow">{heading.kicker}</span><h1>{heading.title}</h1><p>{heading.sub}</p></div>{role==='owner'&&mode.kind==='map'&&<button className="button primary" disabled={busy} onClick={()=>openEditor()}><Plus size={18}/>Pin anlegen</button>}</div>
-<div className="sp-workspace">
+const sheetTitle=mode.kind==='guide'&&session?session.title:mode.kind==='edit'&&placing?'Position wählen':undefined;
+const sheetSub=mode.kind==='edit'&&placing?status.text||heading.sub:mode.kind==='guide'?heading.sub:undefined;
+return <div className="sp sp-workspace" style={{'--sp-peek':`${PEEK}px`} as CSSProperties}>
 <section className="sp-map-section" aria-label="Grundriss und Wissenspunkte">
 <div className="sp-map-header"><strong>{plan.title}</strong><span>{mode.kind==='edit'?(placing?'Position wählen':'Pin bearbeiten'):mode.kind==='guide'&&sessionPin?`Aktueller Ort · ${sessionPin.name}`:`${pins.length} Wissenspunkte`}</span></div>
 <FloorPlanMap plan={plan} rooms={rooms} pins={pins.filter(p=>!(mode.kind==='edit'&&p.id===draft?.id))} selectedId={mode.kind==='edit'?undefined:(sessionPin?.id||selectedId)} onSelectPin={id=>{if(mode.kind==='guide'||mode.kind==='feedback')return;setSelectedId(id);if(mode.kind==='edit'&&role==='owner'){const pin=pins.find(p=>p.id===id);if(pin)openEditor(pin);}}} draft={mode.kind==='edit'?draft:undefined} placing={mode.kind==='edit'&&placing} onDraftMove={moveDraft} onDraftConfirm={()=>{setPlacing(false);setStatus({text:draftRoom?`Position übernommen: ${draftRoom.name}`:''});}}/>
 <div className="sp-map-footer"><MapPin size={13}/><span>Schematischer Grundriss · Möbel sind Beispiele</span></div>
+{role==='owner'&&mode.kind==='map'&&<button type="button" className="sp-fab" aria-label="Pin anlegen" disabled={busy} onClick={()=>openEditor()}><Plus size={24}/></button>}
 </section>
-<aside className="sp-panel" aria-live="polite">{panel}</aside>
-</div>
+<Sheet modal={false} detents={['peek','full']} detent={detent} onDetentChange={setDetent} peekHeight={PEEK} title={sheetTitle} subtitle={sheetSub} label="Wissen zu diesem Ort" className="sp-sheet"><div className="sp" aria-live="polite">{panel}</div></Sheet>
 </div>;}
