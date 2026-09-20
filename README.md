@@ -2,7 +2,7 @@
 
 **Wissen bleibt im Haus.** Funktionsfähiger lokaler Hackathon-Prototyp für die saisonübergreifende Wissenspflege in kleinen Ferienwohnungsbetrieben. Synthetischer Betrieb: Haus Bergzeit, Tirol, drei Wohnungen (Alpenblick, Zirbennest, Talruhe).
 
-Der KI-Begleiter der Fachkräfte heißt **Wissensepp**. Er antwortet nur aus bestätigtem Hauswissen, nennt seine Quellen und sagt offen, wenn etwas fehlt.
+Der KI-Begleiter der Fachkräfte heißt **Wissnsepp**. Er antwortet nur aus bestätigtem Hauswissen, nennt seine Quellen und sagt offen, wenn etwas fehlt.
 
 ## Lokal starten
 
@@ -30,7 +30,7 @@ Alternativ kann `MISTRAL_API_KEY` in `.env.local` hinterlegt werden. Modellnamen
 ## Eine Demo in drei Minuten
 
 1. **Betreiberin / Übersicht:** „Fenstergriff wurde repariert“ öffnen. Den gemeldeten Sachverhalt im Beispiel als geprüft annehmen, den endgültigen Text formulieren und veröffentlichen.
-2. **Mira / Wissensepp:** Nach dem Fenstergriff im Alpenblick fragen. Die Antwort bzw. Textsuche zeigt die bestätigte Version mit Quelle. Zahlungsinformationen sind für diese Rolle ausgeblendet.
+2. **Mira / Wissnsepp:** Nach dem Fenstergriff im Alpenblick fragen. Die Antwort bzw. Textsuche zeigt die bestätigte Version mit Quelle. Zahlungsinformationen sind für diese Rolle ausgeblendet.
 3. **Zimmer-Check:** Als Mira „Gästewechsel & Reinigung" starten. Im Schritt „Bad und Oberflächen" ein Foto des Raums aufnehmen. Die KI vergleicht es mit dem hinterlegten Idealbild und den Prüfpunkten und nennt, was noch fehlt – etwa eine fehlende Ersatzrolle. Danach nachbessern und ein neues Foto machen. Ein unpassender Prüfpunkt lässt sich direkt als Beitrag melden.
 4. **Prozess starten:** „Gästewechsel & Reinigung“ starten, einen Schritt erledigen und über „Problem melden“ Feedback einreichen. Nach Neuladen lässt sich der Durchlauf fortsetzen.
 5. **Lena / Wissenspflege:** Monatlichen Eintrag prüfen. Im Saisonabschluss Notizen und offene Meldungen in einen bearbeitbaren Übergabeentwurf übernehmen. Neue Saison festlegen und Einträge dafür bestätigen.
@@ -55,6 +55,19 @@ Das Feature hängt an den bestehenden Abläufen:
 Die KI beurteilt ausschließlich sichtbare Details und markiert nicht Erkennbares ausdrücklich als „auf dem Foto nicht zu sehen". Die Freigabe trifft immer ein Mensch. Ohne Mistral-Verbindung zeigt der Check die Prüfpunkte klar gekennzeichnet zum manuellen Abhaken statt erfundener Befunde.
 
 Das Bildmodell ist über `MISTRAL_VISION_MODEL` konfigurierbar (Standard: `pixtral-12b-2409`).
+
+## Sprechen statt tippen: der Wissnsepp als Stimme
+
+Über dem Buddy sitzt eine Sprechtaste. Die Fachkraft spricht ihre Frage, der Wissnsepp antwortet hörbar – geerdet auf **dasselbe freigegebene Hauswissen**, das auch die Textansicht nutzt. Er hat bewusst keine eigene Wissensbasis bei ElevenLabs: jede inhaltliche Frage geht über ein Client-Tool zurück in diese App, durch dieselbe Rollen- und Wohnungsprüfung wie ein Klick.
+
+Sechs Werkzeuge stehen dem Gespräch zur Verfügung: `wissen_suchen`, `prozess_starten`, `naechster_schritt`, `schritt_wiederholen`, `problem_melden`, `zimmer_check`. Sie laufen im Browser, nicht auf dem ElevenLabs-Server – deshalb gelten Sitzungscookie, Rolle und Wohnung unverändert, und Gesagtes erscheint sofort im Verlauf des Buddys.
+
+Einrichtung:
+
+1. Im ElevenLabs-Dashboard einen Agent anlegen. `knowledge/wissnsepp-agent.md` enthält Systemprompt, erste Nachricht und die sechs Tool-Definitionen zum Übernehmen. **Keine** Dokumente in die Wissensbasis des Agents laden – das Wissen kommt aus dieser App.
+2. In `.env.local` hinterlegen: `ELEVENLABS_API_KEY` (Berechtigung *Conversational AI*), `ELEVENLABS_AGENT_ID`, optional `VOICE_DAILY_LIMIT` (Standard 20 Gespräche pro Demo-Arbeitsbereich und Tag).
+
+Der Schlüssel verlässt den Server nie: `/api/voice-token` prägt serverseitig ein kurzlebiges WebRTC-Token. Fehlt die Konfiguration, sagt die Sprechtaste das offen, statt ein Gespräch vorzutäuschen.
 
 ## Spätere Veröffentlichung auf Vercel + Supabase
 
@@ -97,6 +110,7 @@ Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird do
 - Die Quellenanzeigen öffnet das aktuelle Hauswissen; der laufende Prozess behält seinen beim Start gespeicherten Inhalt und seine Prozessversion. Prozesshistorie wird serverseitig bewahrt; eine eigene Historienansicht für Prozesse ist noch nicht enthalten.
 - Prüfbedarf wird beim Öffnen anhand von Daten berechnet; keine E-Mail-/Push-Erinnerungen. Belohnungen sind Demo-Anfragen, keine Auszahlungen.
 - Keine echten Buchungs-, Zahlungs-, Gästekarten- oder Notrufintegrationen.
+- Das Sprachgespräch ist ohne gültigen ElevenLabs-Schlüssel mit *Conversational AI*-Berechtigung nicht live verifiziert. Geprüft sind bisher nur Tokenroute, Tageslimit und das ehrliche Verhalten ohne Konfiguration.
 - 60 KI-Anfragen pro Demo-Arbeitsbereich/Tag. Vor öffentlicher gemeinsamer Key-Nutzung zusätzlich globale Limits und Bot-Schutz vorsehen.
 
 ## Prüfungen

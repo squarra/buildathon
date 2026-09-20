@@ -88,3 +88,26 @@
 .brand-arrow{color:#9cb557;margin-left:1px;align-self:flex-start;margin-top:3px}
 .loading .brand-up{color:var(--green)}
 .tirol-note{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);margin-top:4px}
+
+.voice-panel{background:linear-gradient(170deg,#12463c,#0d322b);border-radius:20px;padding:30px 22px 22px;margin-bottom:22px;display:flex;flex-direction:column;align-items:center;color:#eaf2e6}
+.voice-stage{position:relative;display:grid;place-items:center;width:150px;height:150px;margin-bottom:16px}
+.voice-ring{position:absolute;inset:14px;border-radius:50%;border:2px solid #ffffff22;transition:transform .09s linear}
+.voice-ring.outer{inset:0;border-color:#ffffff14}
+.voice-stage.listening .voice-ring{border-color:#d9eb9466}
+.voice-stage.speaking .voice-ring{border-color:#d9eb94cc}
+.voice-stage.connecting .voice-ring{border-color:#ffffff33}
+.voice-orb{position:relative;width:92px;height:92px;border-radius:50%;background:var(--lime);color:#123c33;display:grid;place-items:center;box-shadow:0 10px 30px #0000004d}
+.voice-orb:hover{transform:scale(1.04)}
+.voice-stage.speaking .voice-orb{background:#eaf7b8}
+.voice-stage.connecting .voice-orb,.voice-stage.listening .voice-orb{background:#fff}
+.spin{animation:voice-spin 1s linear infinite}
+@keyframes voice-spin{to{transform:rotate(360deg)}}
+.voice-status{display:flex;align-items:center;gap:8px;color:#fff}
+.voice-status strong{font-family:'Manrope',system-ui,sans-serif;font-size:17px;font-weight:750;letter-spacing:-.3px}
+.voice-hint{margin:7px 0 0;font-size:13px;color:#ffffffa8;text-align:center;max-width:360px;line-height:1.55}
+.voice-error{display:flex;align-items:center;gap:8px;margin-top:14px;background:#ffffff1a;border:1px solid #ffffff33;border-radius:10px;padding:10px 13px;font-size:13px;color:#ffe2d4;max-width:420px}
+.voice-transcript{margin-top:18px;width:100%;max-width:460px;max-height:210px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #ffffff1f}
+.voice-line{font-size:14px;line-height:1.55;padding:9px 13px;border-radius:12px;background:#ffffff14}
+.voice-line.user{background:#d9eb941f;color:#f0f7dd;align-self:flex-end;max-width:85%}
+.voice-line.agent{color:#eaf2e6;max-width:92%}
+@media(max-width:760px){.voice-panel{padding:24px 16px 18px}.voice-stage{width:132px;height:132px}.voice-orb{width:82px;height:82px}}
