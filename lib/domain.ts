@@ -1,5 +1,6 @@
 import {State,Role,Entry,Step,Standard,Finding,Inspection} from './types';
 import {english} from './english';
+import {seed} from './seed';
 import {randomUUID} from 'node:crypto';
 export const date=()=>new Date().toISOString().slice(0,10);
 export function allowed(entry:{roles:Role[];unit?:string;archived?:boolean},role:Role,unit?:string){return !entry.archived&&entry.roles.includes(role)&&(!unit||entry.unit==='Alle Wohnungen'||entry.unit===unit);}
@@ -57,3 +58,13 @@ s.inspections.unshift(inspection);if(s.inspections.length>40)s.inspections.lengt
 if(!data.demo&&data.status==='pass')award(s,`inspection-${inspection.id}`,role,2,`Zimmer-Check bestanden: ${st.title}`);
 return inspection;}
 export function standardFor(s:State,role:Role,unit:string,processId?:string,stepId?:string){return s.standards.find(st=>allowed(st,role,unit)&&st.processId===processId&&st.stepId===stepId);}
+// Ältere Arbeitsbereiche wurden vor neueren Feldern angelegt. Ohne diese Angleichung
+// läuft jedes spätere .filter() auf undefined und die ganze Oberfläche bricht ab.
+export function migrate(data:any):State{const base=seed();if(!data||typeof data!=='object')return base;
+for(const k of ['entries','processes','contributions','runs','standards','inspections','ledger','rewards','checks'] as const)if(!Array.isArray((data as any)[k]))(data as any)[k]=k==='standards'||k==='inspections'?base[k]:[];
+if(!data.handover||typeof data.handover!=='object')data.handover=base.handover;
+if(typeof data.season!=='string')data.season=base.season;
+if(!data.settings||typeof data.settings!=='object')data.settings=base.settings;
+if(typeof data.settings.calls!=='number')data.settings.calls=0;
+if(typeof data.settings.day!=='string')data.settings.day=base.settings.day;
+return data as State;}

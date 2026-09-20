@@ -36,6 +36,8 @@ Alternativ kann `MISTRAL_API_KEY` in `.env.local` hinterlegt werden. Modellnamen
 5. **Lena / Wissenspflege:** Monatlichen Eintrag prüfen. Im Saisonabschluss Notizen und offene Meldungen in einen bearbeitbaren Übergabeentwurf übernehmen. Neue Saison festlegen und Einträge dafür bestätigen.
 6. **Mira / Anerkennung:** Bestätigte hilfreiche Beiträge bringen Punkte. Einen Demo-Kaffeegutschein anfragen; Lena kann die Anfrage bestätigen.
 
+Der Ablauf **„Abreisereinigung Schritt für Schritt"** ist der ausführliche Hausablauf in 19 Schritten, vom Material über die Räume bis zur Freigabe. Er stammt aus einem echten Housekeeping-Handbuch, das im Team aufbereitet wurde (`origin/voice-feature`, Ordner `knowledge/`), und wurde für diesen Betrieb entbrandet: Farbsystem, Reihenfolgeregeln und Freigabekriterien sind als bestätigte Wissenseinträge hinterlegt, alles im Handbuch Unbestätigte steht ausdrücklich als „noch nicht festgelegt" statt erfunden zu sein.
+
 Beispielprozesse lassen sich über „Prozesse“ bearbeiten und erweitern. Neue Wissenseinträge beginnen als Beiträge. PDFs, TXT, Markdown, Fotos und Audio lassen sich einem Beitrag hinzufügen. Anhänge bleiben nach Freigabe mit dem Wissen verknüpft.
 
 ## Zimmer-Check: visuelle Qualitätskontrolle
