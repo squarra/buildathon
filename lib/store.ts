@@ -8,11 +8,18 @@ const remote=!!process.env.SUPABASE_URL&&!!process.env.SUPABASE_SERVICE_ROLE_KEY
 // Ein gesetzter SHARED_WORKSPACE_ID lässt alle Besucher denselben Betrieb sehen:
 // gemeinsames Wissen, gemeinsame Beiträge, gemeinsames Tagesbudget. Ohne die
 // Variable bekommt jeder Browser weiterhin seinen eigenen isolierten Arbeitsbereich.
-const shared=process.env.SHARED_WORKSPACE_ID?.trim();
+// Die Spalte id ist eine uuid. Ein sprechender Wert wie "seasonup-demo" wäre für
+// Postgres kein gültiger Schlüssel, deshalb wird alles, was keine UUID ist, fest in
+// eine abgeleitet: derselbe Text ergibt immer denselben Arbeitsbereich.
+function workspaceId(value:string){if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value))return value;const h=createHash('sha256').update(value).digest('hex');return `${h.slice(0,8)}-${h.slice(8,12)}-5${h.slice(13,16)}-8${h.slice(17,20)}-${h.slice(20,32)}`;}
+const sharedRaw=process.env.SHARED_WORKSPACE_ID?.trim();
+const shared=sharedRaw?workspaceId(sharedRaw):undefined;
 export async function identity(){const c=await cookies();if(shared){const value=c.get('sw-role')?.value;const role:Role=value==='staff'||value==='cleaner'?value:'owner';return {id:shared,role};}let id=c.get('sw-session')?.value;if(!id||!/^\w{8}-[\w-]{27,40}$/.test(id)){id=randomUUID();c.set('sw-session',id,{httpOnly:true,sameSite:'lax',secure:process.env.NODE_ENV==='production',maxAge:60*60*24*30,path:'/'});}const value=c.get('sw-role')?.value;const role:Role=value==='staff'||value==='cleaner'?value:'owner';return {id,role};}
 export async function roleCookie(role:Role){if(!['owner','staff','cleaner'].includes(role))throw Error('Ungültige Rolle.');(await cookies()).set('sw-role',role,{httpOnly:true,sameSite:'lax',secure:process.env.NODE_ENV==='production',path:'/'});}
 function headers(){return {'apikey':process.env.SUPABASE_SERVICE_ROLE_KEY!,'Authorization':`Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,'Content-Type':'application/json'};}
-async function request(url:string,options:RequestInit={}){const r=await fetch(`${process.env.SUPABASE_URL}/rest/v1/${url}`,{...options,headers:{...headers(),...options.headers},cache:'no-store'});if(!r.ok)throw Error('Datenbank nicht erreichbar. Bitte Supabase-Einrichtung prüfen.');return r;}
+async function request(url:string,options:RequestInit={}){const r=await fetch(`${process.env.SUPABASE_URL}/rest/v1/${url}`,{...options,headers:{...headers(),...options.headers},cache:'no-store'});// Der Statuscode gehört in die Meldung: ohne ihn ist von außen nicht zu unterscheiden,
+// ob das Projekt schläft, der Schlüssel abgelehnt wird oder die Tabelle fehlt.
+if(!r.ok){console.error('supabase',r.status,url.split('?')[0],(await r.text()).slice(0,200));throw Error(`Datenbank nicht erreichbar (Supabase antwortet mit ${r.status}). Bitte Supabase-Einrichtung prüfen.`);}return r;}
 type RecordState={data:State;version:number};
 async function read(id:string):Promise<RecordState>{if(remote){let r=await request(`demo_workspaces?id=eq.${id}&select=data,version`);let rows=await r.json();if(!rows.length){await request('demo_workspaces?on_conflict=id',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates'},body:JSON.stringify({id,data:seed(),version:0})});rows=await(await request(`demo_workspaces?id=eq.${id}&select=data,version`)).json();}const row=rows[0];return {data:migrate(row.data),version:row.version};}if(process.env.VERCEL)throw Error('Für das Deployment bitte Supabase konfigurieren.');await mkdir(dir,{recursive:true});try{const rec=JSON.parse(await readFile(path.join(dir,`${id}.json`),'utf8'));return {data:migrate(rec.data),version:rec.version};}catch(e:any){if(e.code!=='ENOENT')throw e;return {data:seed(),version:0};}}
 let queue=Promise.resolve();

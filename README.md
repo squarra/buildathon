@@ -15,7 +15,7 @@ npm run dev
 
 Die Anwendung läuft unter http://localhost:3000. In diesem Arbeitsbereich ist sie bereits eingerichtet.
 
-Standardmäßig bekommt jeder Browser über das Sitzungscookie seinen eigenen isolierten Demo-Betrieb. Ist `SHARED_WORKSPACE_ID` gesetzt, sehen **alle Besucher denselben Betrieb**: gemeinsames Wissen, gemeinsame Beiträge, ein gemeinsames Tagesbudget für KI-Aufrufe. Das ist für eine Team- oder Jury-Demo gedacht und bewusst ungeschützt – jede Person kann jede Rolle wählen, Wissen ändern und einen hinterlegten Mistral-Schlüssel mitbenutzen. Die Rollenwahl bleibt pro Browser.
+Standardmäßig bekommt jeder Browser über das Sitzungscookie seinen eigenen isolierten Demo-Betrieb. Ist `SHARED_WORKSPACE_ID` gesetzt, sehen **alle Besucher denselben Betrieb**: gemeinsames Wissen, gemeinsame Beiträge, ein gemeinsames Tagesbudget für KI-Aufrufe. Das ist für eine Team- oder Jury-Demo gedacht und bewusst ungeschützt – jede Person kann jede Rolle wählen, Wissen ändern und einen hinterlegten Mistral-Schlüssel mitbenutzen. Die Rollenwahl bleibt pro Browser. Der Wert darf ein beliebiger Text sein: die Datenbankspalte ist eine `uuid`, deshalb wird aus allem, was keine UUID ist, fest eine abgeleitet.
 
 Ohne externe Dienste werden Daten serverseitig unter `.data/` gespeichert. Die Dateien werden atomar geschrieben; Änderungen bleiben nach Neuladen und Neustart erhalten. Das Sitzungscookie verbindet den Browser mit seinem isolierten Demo-Arbeitsbereich. Ein anderer Browser bekommt einen eigenen Betrieb. Dies ist absichtlich kein gemeinsamer produktiver Mandant.
 
