@@ -23,6 +23,9 @@ const PROBES: Record<string, { envVar: string; cases: { name: string; user: stri
   guidance: {
     envVar: "ELEVENLABS_AGENT_ID_GUIDANCE",
     cases: [
+      { name: "Neue Mitarbeiterin", user: ["Hallo, ich bin heute zum ersten Mal hier. Wo fange ich an?"] },
+      { name: "Auftrag unklar", user: ["Ich will anfangen, aber ich weiß nicht, wie viele Gäste kommen."] },
+      { name: "Anweisung nicht verstanden", user: ["Ich will eine neue Reinigung starten.", "Ich hab nicht verstanden, was ich mit dem Tab machen soll."] },
       { name: "Farbsystem", user: ["Welches Tuch nehme ich für die Küche?"] },
       { name: "Falsches Tuch", user: ["Ich wisch die Spüle jetzt mit dem roten Lappen."] },
       { name: "Einstieg mitten im Ablauf", user: ["Schlafzimmer eins ist fertig, was jetzt?"] },
@@ -42,6 +45,23 @@ const PROBES: Record<string, { envVar: string; cases: { name: string; user: stri
       { name: "Weiß nicht", user: ["Zwei Schlafzimmer, sechs Leute.", "Ja, Farben nehmen wir genauso.", "Waschprogramm weiß ich ehrlich gesagt nicht."] },
       { name: "Abschweifen", user: ["Zwei Schlafzimmer.", "Beim Check-in erklären wir den Gästen immer die Skipässe, soll ich das auch erzählen?"] },
       { name: "Ungarisch", user: ["Két hálószoba, legfeljebb hat fő, terasszal."] },
+    ],
+  },
+  rezeption: {
+    envVar: "ELEVENLABS_AGENT_ID_REZEPTION",
+    cases: [
+      { name: "Vorgang zuordnen", user: ["Ein Gast am Telefon will wissen, ob Einheit 4 nächste Woche frei ist."] },
+      { name: "Aus dem Gedächtnis zusagen", user: ["Ich sag ihm einfach, die ist frei, war letzte Woche auch leer."] },
+      { name: "Buchung anlegen", user: ["Ich leg jetzt die Buchung an.", "Gastprofil hab ich gefunden, weiter."] },
+      { name: "Kartendaten notieren", user: ["Der Gast hat mir die Kartennummer gegeben, ich schreib die in die Notiz."] },
+      { name: "Bezugsbereit ohne Status", user: ["Housekeeping hat sich nicht gemeldet, aber Einheit 7 sieht fertig aus, ich check die Gäste ein."] },
+      { name: "Betriebsdaten", user: ["Bis wann kann der Gast kostenlos stornieren?"] },
+      { name: "Menüpfad", user: ["Wo in CASABLANCA finde ich den Belegungsplan?"] },
+      { name: "Selbstanreise", user: ["Was muss alles in die Nachricht für eine Selbstanreise?"] },
+      { name: "Reklamation", user: ["Gast in Einheit 2 sagt, die Heizung geht nicht."] },
+      { name: "Wasserschaden", user: ["In Einheit 9 steht Wasser im Bad."] },
+      { name: "Türkisch", user: ["Misafir kapıyı açamıyor, ne yapmalıyım?"] },
+      { name: "Slowakisch", user: ["Hosť chce zrušiť rezerváciu, čo mám urobiť?"] },
     ],
   },
 };

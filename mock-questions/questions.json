@@ -1,0 +1,37 @@
+[
+  {
+    "id": "defekte-spuelmaschine",
+    "de": "Wie melde ich eine defekte Spülmaschine?",
+    "tr": "Bozuk bir bulaşık makinesini nasıl bildiririm?",
+    "sk": "Ako nahlásim pokazenú umývačku riadu?",
+    "hu": "Hogyan jelentek egy elromlott mosogatógépet?"
+  },
+  {
+    "id": "tuch-badezimmer",
+    "de": "Welches Tuch nehme ich für das Badezimmer?",
+    "tr": "Banyo için hangi bezi kullanmalıyım?",
+    "sk": "Akú utierku mám použiť na kúpeľňu?",
+    "hu": "Milyen kendőt használjak a fürdőszobához?"
+  },
+  {
+    "id": "ring-gefunden",
+    "de": "Ich habe einen Ring im Nachttisch gefunden. Was mache ich damit?",
+    "tr": "Komodinin içinde bir yüzük buldum. Ne yapmalıyım?",
+    "sk": "Našla som prsteň v nočnom stolíku. Čo s ním mám urobiť?",
+    "hu": "Találtam egy gyűrűt az éjjeliszekrényben. Mit csináljak vele?"
+  },
+  {
+    "id": "muell-wohin",
+    "de": "Wo bringe ich den Müll hin?",
+    "tr": "Çöpü nereye götürmeliyim?",
+    "sk": "Kam mám odniesť odpadky?",
+    "hu": "Hová vigyem a szemetet?"
+  },
+  {
+    "id": "erster-tag",
+    "de": "Ich bin heute zum ersten Mal hier. Wo fange ich an?",
+    "tr": "Bugün ilk kez buradayım. Nereden başlamalıyım?",
+    "sk": "Dnes som tu prvýkrát. Kde mám začať?",
+    "hu": "Ma vagyok itt először. Hol kezdjem?"
+  }
+]

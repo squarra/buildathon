@@ -27,11 +27,12 @@ type VoiceAgentPageProps = {
   setFlow: (value: Flow) => void;
 };
 
-type Flow = "guidance" | "onboarding";
+type Flow = "guidance" | "onboarding" | "rezeption";
 
 const FLOW_LABEL: Record<Flow, string> = {
   guidance: "Mitarbeiter-Anleitung",
   onboarding: "Onboarding (Inhaber)",
+  rezeption: "Rezeption",
 };
 
 type ConversationMessage = {

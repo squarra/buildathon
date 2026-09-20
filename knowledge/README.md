@@ -1,20 +1,21 @@
 # knowledge/ — Wissensbasis und Prompts der ElevenLabs-Agenten
 
-Quelle für alles hier ist `notes/Housekeeping_Handbuch_MountainChalets_Fiss.md`. Die Dateien in diesem Ordner sind die für Sprachagenten aufbereitete Fassung: entbrandet, ohne Dokument-Meta (Freigabefelder, Versionsstatus, Website-Verweise), Checklisten zu Sätzen umgeschrieben, und alles, was das Handbuch als „zu bestätigen" markiert, steht als `noch nicht festgelegt` drin statt erfunden zu werden.
+Quellen sind die Handbücher in `handbooks/`: `Housekeeping_Handbuch_MountainChalets_Fiss_angepasst.md` für die Agenten guidance und onboarding, `Prozesshandbuch_Rezeption_9_Einheiten.md` für den Agenten rezeption. §-Verweise unten beziehen sich auf die Nummerierung des jeweiligen Handbuchs. Die Dateien in diesem Ordner sind die für Sprachagenten aufbereitete Fassung: entbrandet, ohne Dokument-Meta (Freigabefelder, Versionsstatus, Website-Verweise), Checklisten zu Sätzen umgeschrieben, und alles, was das Handbuch als „zu bestätigen" markiert, steht als `noch nicht festgelegt` drin statt erfunden zu werden.
 
 ## Warum zwei Nutzungsarten
 
 ElevenLabs' Knowledge Base ist RAG: Dokumente werden in Chunks zerlegt und nach Ähnlichkeit zum Gesprächsverlauf nachgeladen. Das funktioniert für Nachschlagefragen („welches Tuch für die Küche"), gibt dem Agenten aber kein Gefühl für *Reihenfolge* und keine Garantie, dass Sicherheitsregeln im Kontext sind. Deshalb:
 
-- **`prompt`** – wird bei jedem Turn komplett in den Kontext injiziert. Für Regeln, Farbsystem, Ablaufreihenfolge, Betriebsdaten, Interviewleitfaden. Klein halten.
+- **`prompt`** – wird bei jedem Turn komplett in den Kontext injiziert. Für Regeln, Farbsystem, Schnellstart, Ablaufreihenfolge, Betriebsdaten, Interviewleitfaden. Klein halten.
 - **`auto`** – wird per RAG nachgeladen. Für die 19 Prozessdokumente und Qualität/Meldung. Eine Datei pro Prozess, damit der Treffer sauber auf dem richtigen Prozess landet.
 
-## Zwei Agenten
+## Drei Agenten
 
 | Agent | Nutzer | Aufgabe | Env-Variable |
 |---|---|---|---|
 | **guidance** | Reinigungskraft | führt Schritt für Schritt durch die Abreisereinigung, beantwortet Nachschlagefragen, setzt Farbsystem durch, sagt bei offenen Betriebsdaten „nicht festgelegt" | `ELEVENLABS_AGENT_ID_GUIDANCE` (Fallback `ELEVENLABS_AGENT_ID`) |
 | **onboarding** | Inhaber/Leitung | interviewt den Betrieb entlang der Prozessvorlage, schlägt Standards vor, sammelt Abweichungen und offene Punkte | `ELEVENLABS_AGENT_ID_ONBOARDING` |
+| **rezeption** | Rezeptionskraft | ordnet einen Vorgang einem der 23 Rezeptionsprozesse zu, führt Schritt für Schritt durch, setzt Grundprüfung und Sicherheitsregeln durch, erfindet keine CASABLANCA-Menüpfade oder Statuswerte | `ELEVENLABS_AGENT_ID_REZEPTION` |
 
 Der Output des Onboarding-Agenten (Data-Collection-Felder, siehe `onboarding/data-collection.md`) füllt genau die Lücken in `guidance/betriebsdaten.md`.
 
@@ -26,22 +27,32 @@ Standard ist Deutsch; zusätzlich Türkisch, Slowakisch und Ungarisch (`addition
 
 | Datei | Agent | Modus | Handbuch |
 |---|---|---|---|
-| `shared/regeln-und-farbsystem.md` | beide | prompt | §3, §4 |
+| `shared/regeln-und-farbsystem.md` | beide | prompt | §4, §5 |
+| `guidance/schnellstart.md` | guidance | prompt | §3 |
 | `guidance/system-prompt.md` | guidance | Systemprompt | – |
 | `guidance/first-message.md`, `.tr/.sk/.hu.md` | guidance | Begrüßung (+ Presets) | – |
-| `guidance/ablauf-uebersicht.md` | guidance | prompt | §6 Titel, §11 |
-| `guidance/betriebsdaten.md` | guidance | prompt | §2.3, §12 (Platzhalter) |
+| `guidance/ablauf-uebersicht.md` | guidance | prompt | §7 Titel, §12 |
+| `guidance/betriebsdaten.md` | guidance | prompt | §2.3, §13 (Platzhalter) |
 | `guidance/betriebsdaten.demo.md` | guidance | prompt (mit `--demo`) | dito, mit Demo-Werten |
-| `guidance/qualitaet-und-meldung.md` | guidance | auto | §5, §7, §8, P19 |
-| `guidance/prozesse/01…19-*.md` | guidance | auto | §6 Prozess 1–19 |
+| `guidance/qualitaet-und-meldung.md` | guidance | auto | §6, §8, §9, P19 |
+| `guidance/prozesse/01…19-*.md` | guidance | auto | §7 Prozess 1–19 |
 | `onboarding/system-prompt.md` | onboarding | Systemprompt | – |
 | `onboarding/first-message.md`, `.tr/.sk/.hu.md` | onboarding | Begrüßung (+ Presets) | – |
-| `onboarding/prozess-vorlage.md` | onboarding | prompt | §6 komprimiert + Varianten |
-| `onboarding/interviewleitfaden.md` | onboarding | prompt | §2.3, §12 als Fragen |
-| `onboarding/data-collection.md` | onboarding | manuell im Dashboard | §2.3, §12 als Felder |
+| `onboarding/prozess-vorlage.md` | onboarding | prompt | §7 komprimiert + Varianten |
+| `onboarding/interviewleitfaden.md` | onboarding | prompt | §2.3, §13 als Fragen |
+| `onboarding/data-collection.md` | onboarding | manuell im Dashboard | §2.3, §13 als Felder |
+| `rezeption/system-prompt.md` | rezeption | Systemprompt | – |
+| `rezeption/first-message.md`, `.tr/.sk/.hu.md` | rezeption | Begrüßung (+ Presets) | – |
+| `rezeption/grundregeln-und-status.md` | rezeption | prompt | Rez. §2, §3, P16 Prioritäten, P23 Auslöser |
+| `rezeption/ablauf-uebersicht.md` | rezeption | prompt | Rez. §4–11 Titel |
+| `rezeption/betriebsdaten.md` | rezeption | prompt | Rez. §1, §12.1 (Platzhalter) |
+| `rezeption/betriebsdaten.demo.md` | rezeption | prompt (mit `--demo`) | dito, mit Demo-Werten |
+| `rezeption/prozesse/01…23-*.md` | rezeption | auto | Rez. Prozess 1–23 |
 | `manifest.json` | – | Steuerdatei für das Sync-Skript | – |
 
-Bewusst weggelassen: §1 Zweck, §2.2 Website-Rahmen, §9 Einarbeitung durch erfahrene Person, §10 Handbuchpflege, §12 Freigabefeld.
+Bewusst weggelassen (Housekeeping): §1 Zweck, §2.2 Website-Rahmen, §10 Einarbeitung durch erfahrene Person, §11 Handbuchpflege, §13 Freigabefeld. (Rezeption): §12.2 Freigabekriterien, §12.3 Änderungsprozess, §13 Freigabefeld.
+
+Der Rezeptionsagent bekommt `shared/regeln-und-farbsystem.md` nicht – das Farbsystem gilt nur für Housekeeping. Anders als bei der Reinigung gibt es an der Rezeption keine feste Gesamtreihenfolge; der Agent ordnet den Vorgang zuerst einem Prozess zu und führt dann innerhalb des Prozesses Schritt für Schritt.
 
 ## Hochladen
 
@@ -58,7 +69,7 @@ Das Skript lädt alle Dateien als Text-Dokumente mit Präfix `hk/` hoch, hängt 
 ## Testen ohne Mikrofon
 
 ```bash
-npm run probe                        # beide Agenten
+npm run probe                        # alle Agenten
 npm run probe -- guidance
 ```
 
@@ -67,4 +78,4 @@ Schickt die Testfragen aus `web/scripts/probe-agents.mts` (Farbsystem, falsches 
 ## Manuell im Dashboard
 
 - Data-Collection-Felder für den Onboarding-Agenten anlegen (`onboarding/data-collection.md`).
-- Nach dem Vercel-Deploy die Domain bei beiden Agenten in die Allowlist eintragen.
+- Nach dem Vercel-Deploy die Domain bei allen Agenten in die Allowlist eintragen.

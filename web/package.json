@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "sync-kb": "tsx scripts/sync-knowledge.mts",
-    "probe": "tsx scripts/probe-agents.mts"
+    "probe": "tsx scripts/probe-agents.mts",
+    "mock-questions": "tsx scripts/mock-questions.mts"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.60.0",

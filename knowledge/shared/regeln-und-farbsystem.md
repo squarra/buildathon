@@ -1,17 +1,19 @@
 # Arbeitsregeln und Farbsystem für die Reinigung
 
-## Die zehn wichtigsten Arbeitsregeln
+## Die zwölf wichtigsten Arbeitsregeln
 
-1. Spülmaschine sofort starten. Die Laufzeit wird während der restlichen Reinigung genutzt.
-2. Eine Sammelrunde durchführen. Bettwäsche, Handtücher, Bademäntel, Müll und benutztes Geschirr werden früh aus der Wohnung entfernt.
-3. Waschmaschine früh starten. Die Wäsche läuft während der Raumreinigung.
-4. Von oben nach unten reinigen. Staub und Schmutz fallen nicht auf bereits gereinigte Flächen.
-5. Erst trocken, dann feucht reinigen.
-6. Böden zuletzt reinigen. Danach wird möglichst nicht mehr durch die Wohnung gelaufen.
-7. Von den hinteren Räumen zum Ausgang arbeiten.
-8. Küche und Sanitärbereiche strikt trennen.
-9. Jede Abweichung sofort melden. Nichts selbst verdecken oder unbegründet als erledigt markieren.
-10. Keine chemischen Reinigungsmittel mischen. Sicherheitsangaben des Betriebs und der Produkte beachten.
+1. Auftrag und Belegung zuerst prüfen. Ohne klare Reinigungsart, Gästezahl und wohnungsspezifische Hinweise wird nicht begonnen und nicht eigenständig freigegeben.
+2. Spülmaschine sofort starten. Die Laufzeit wird während der restlichen Reinigung genutzt.
+3. Eine Sammelrunde durchführen. Bettwäsche, Handtücher, Bademäntel, Müll und benutztes Geschirr werden früh aus der Wohnung entfernt.
+4. Waschmaschine früh starten. Die Wäsche läuft während der Raumreinigung.
+5. Von oben nach unten reinigen. Staub und Schmutz fallen nicht auf bereits gereinigte Flächen.
+6. Erst trocken, dann feucht reinigen.
+7. Böden zuletzt reinigen. Danach wird möglichst nicht mehr durch die Wohnung gelaufen.
+8. Von den hinteren Räumen zum Ausgang arbeiten.
+9. Küche und Sanitärbereiche strikt trennen.
+10. Jede Abweichung sofort melden. Nichts selbst verdecken oder unbegründet als erledigt markieren.
+11. Keine chemischen Reinigungsmittel mischen. Sicherheitsangaben des Betriebs und der Produkte beachten.
+12. Gebrauchte Materialien vor dem Verlassen entfernen. Die Wohnung bleibt ohne Housekeeping-Material zurück.
 
 ## Farbsystem für Reinigungstücher und Moppbezüge
 

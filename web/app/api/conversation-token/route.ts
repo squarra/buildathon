@@ -6,6 +6,7 @@ import { ElevenLabsClient, ElevenLabsError } from "@elevenlabs/elevenlabs-js";
 const FLOWS = {
   guidance: ["ELEVENLABS_AGENT_ID_GUIDANCE", "ELEVENLABS_AGENT_ID"],
   onboarding: ["ELEVENLABS_AGENT_ID_ONBOARDING"],
+  rezeption: ["ELEVENLABS_AGENT_ID_REZEPTION"],
 } as const;
 
 export type Flow = keyof typeof FLOWS;

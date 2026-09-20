@@ -20,6 +20,10 @@
           "usageMode": "prompt"
         },
         {
+          "path": "guidance/schnellstart.md",
+          "usageMode": "prompt"
+        },
+        {
           "path": "guidance/ablauf-uebersicht.md",
           "usageMode": "prompt"
         },
@@ -56,6 +60,32 @@
         {
           "path": "onboarding/interviewleitfaden.md",
           "usageMode": "prompt"
+        }
+      ]
+    },
+    "rezeption": {
+      "displayName": "Rezeption – Mitarbeiter-Anleitung",
+      "envVar": "ELEVENLABS_AGENT_ID_REZEPTION",
+      "cloneFrom": "guidance",
+      "systemPrompt": "rezeption/system-prompt.md",
+      "firstMessage": "rezeption/first-message.md",
+      "docs": [
+        {
+          "path": "rezeption/grundregeln-und-status.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "rezeption/ablauf-uebersicht.md",
+          "usageMode": "prompt"
+        },
+        {
+          "path": "rezeption/betriebsdaten.md",
+          "usageMode": "prompt",
+          "demoPath": "rezeption/betriebsdaten.demo.md"
+        },
+        {
+          "glob": "rezeption/prozesse/*.md",
+          "usageMode": "auto"
         }
       ]
     }
