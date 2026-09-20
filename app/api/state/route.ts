@@ -1,0 +1,3 @@
+import {identity,transaction,guard,roleCookie} from '@/lib/store';import {mutate,visible} from '@/lib/domain';
+export async function GET(){try{const {id,role}=await identity();return Response.json({state:await transaction(id,s=>visible(s,role)),role});}catch(e:any){return Response.json({error:e.message},{status:500});}}
+export async function POST(req:Request){try{guard(req);const {id,role}=await identity();const a=await req.json();if(a.type==='role'){await roleCookie(a.role);return Response.json({state:await transaction(id,s=>visible(s,a.role)),role:a.role});}const state=await transaction(id,s=>visible(mutate(s,role,a),role));return Response.json({state,role});}catch(e:any){return Response.json({error:e.message},{status:400});}}

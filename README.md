@@ -1,93 +1,113 @@
-# buildathon26
+# SeasonUp
 
+**Wissen bleibt im Haus.** Funktionsfähiger lokaler Hackathon-Prototyp für die saisonübergreifende Wissenspflege in kleinen Ferienwohnungsbetrieben. Synthetischer Betrieb: Haus Bergzeit, Tirol, drei Wohnungen (Alpenblick, Zirbennest, Talruhe).
 
+Der KI-Begleiter der Fachkräfte heißt **Wissensepp**. Er antwortet nur aus bestätigtem Hauswissen, nennt seine Quellen und sagt offen, wenn etwas fehlt.
 
-## Getting started
+## Lokal starten
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Voraussetzung: Node.js 22.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/Tusoteuthis/buildathon26.git
-git branch -M main
-git push -uf origin main
+```sh
+npm install
+npm run dev
 ```
 
-## Integrate with your tools
+Die Anwendung läuft unter http://localhost:3000. In diesem Arbeitsbereich ist sie bereits eingerichtet.
 
-* [Set up project integrations](https://gitlab.com/Tusoteuthis/buildathon26/-/settings/integrations)
+Ohne externe Dienste werden Daten serverseitig unter `.data/` gespeichert. Die Dateien werden atomar geschrieben; Änderungen bleiben nach Neuladen und Neustart erhalten. Das Sitzungscookie verbindet den Browser mit seinem isolierten Demo-Arbeitsbereich. Ein anderer Browser bekommt einen eigenen Betrieb. Dies ist absichtlich kein gemeinsamer produktiver Mandant.
 
-## Collaborate with your team
+## Mistral verbinden
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+1. Oben rechts „Lena · Betreiberin“ auswählen.
+2. „Einstellungen“ öffnen.
+3. Mistral-Key im Passwortfeld eintragen und „Verbindung prüfen & speichern“ wählen.
 
-## Test and Deploy
+Der Schlüssel wird verschlüsselt serverseitig gespeichert und nie an den Browser zurückgegeben. Lokal wird dafür eine Schlüsseldatei mit eingeschränkten Dateirechten erzeugt. Ohne Mistral-Verbindung funktioniert eine ausdrücklich gekennzeichnete Textsuche. Die Demo-Abläufe sind auch ohne KI ausführbar. Neue Durchläufe enthalten englische Übersetzungen der unveränderten Beispieldaten; Übersetzungen eigener oder geänderter Inhalte benötigen Mistral.
 
-Use the built-in continuous integration in GitLab.
+Alternativ kann `MISTRAL_API_KEY` in `.env.local` hinterlegt werden. Modellnamen lassen sich über die Variablen aus `.env.example` konfigurieren. Getestet werden kann ein Schlüssel über die Modelle-API; die tatsächliche Nutzbarkeit der Chat-, Audio- und OCR-Modelle hängt vom Konto ab.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## Eine Demo in drei Minuten
 
-***
+1. **Betreiberin / Übersicht:** „Fenstergriff wurde repariert“ öffnen. Den gemeldeten Sachverhalt im Beispiel als geprüft annehmen, den endgültigen Text formulieren und veröffentlichen.
+2. **Mira / Wissensepp:** Nach dem Fenstergriff im Alpenblick fragen. Die Antwort bzw. Textsuche zeigt die bestätigte Version mit Quelle. Zahlungsinformationen sind für diese Rolle ausgeblendet.
+3. **Zimmer-Check:** Als Mira „Gästewechsel & Reinigung" starten. Im Schritt „Bad und Oberflächen" ein Foto des Raums aufnehmen. Die KI vergleicht es mit dem hinterlegten Idealbild und den Prüfpunkten und nennt, was noch fehlt – etwa eine fehlende Ersatzrolle. Danach nachbessern und ein neues Foto machen. Ein unpassender Prüfpunkt lässt sich direkt als Beitrag melden.
+4. **Prozess starten:** „Gästewechsel & Reinigung“ starten, einen Schritt erledigen und über „Problem melden“ Feedback einreichen. Nach Neuladen lässt sich der Durchlauf fortsetzen.
+5. **Lena / Wissenspflege:** Monatlichen Eintrag prüfen. Im Saisonabschluss Notizen und offene Meldungen in einen bearbeitbaren Übergabeentwurf übernehmen. Neue Saison festlegen und Einträge dafür bestätigen.
+6. **Mira / Anerkennung:** Bestätigte hilfreiche Beiträge bringen Punkte. Einen Demo-Kaffeegutschein anfragen; Lena kann die Anfrage bestätigen.
 
-# Editing this README
+Beispielprozesse lassen sich über „Prozesse“ bearbeiten und erweitern. Neue Wissenseinträge beginnen als Beiträge. PDFs, TXT, Markdown, Fotos und Audio lassen sich einem Beitrag hinzufügen. Anhänge bleiben nach Freigabe mit dem Wissen verknüpft.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Zimmer-Check: visuelle Qualitätskontrolle
 
-## Suggestions for a good README
+Die Betreiberin legt unter „Zimmer-Check" pro Raum einen **Sicht-Standard** an: ein Idealbild des perfekt vorbereiteten Raums plus prüfbare Punkte („Ersatzrolle Toilettenpapier sichtbar bereitgestellt"). Mit Mistral-Verbindung schlägt die KI diese Punkte aus dem Idealbild vor; sie bleiben bearbeitbar.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Die Fachkraft fotografiert den fertigen Raum – im Buddy direkt im passenden Prozessschritt oder über die Liste „Zimmer-Check". Serverseitig vergleicht ein Bildmodell das Foto mit Idealbild und Checkliste und gibt eine Hinweisliste zurück. Fotos werden vor dem Upload im Browser auf 1280 px verkleinert.
 
-## Name
-Choose a self-explaining name for your project.
+Das Feature hängt an den bestehenden Abläufen:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- **Prozesse:** Ein Sicht-Standard lässt sich an einen Prozessschritt hängen und erscheint dort automatisch.
+- **Beiträge:** Jeder Befund kann als Änderungsvorschlag gemeldet werden; das geprüfte Foto bleibt am Beitrag sichtbar.
+- **Wissenspflege:** Idealbilder laufen im monatlichen Check-in und zum Saisonstart mit („Sieht der Raum heute noch so aus?"). Änderungen legen eine neue Version mit Historie an.
+- **Saisonübergabe:** Wiederkehrende offene Befunde fließen in den Übergabeentwurf ein.
+- **Anerkennung:** Ein bestandener Check und eine bestätigte Standard-Prüfung geben je 2 Punkte.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Die KI beurteilt ausschließlich sichtbare Details und markiert nicht Erkennbares ausdrücklich als „auf dem Foto nicht zu sehen". Die Freigabe trifft immer ein Mensch. Ohne Mistral-Verbindung zeigt der Check die Prüfpunkte klar gekennzeichnet zum manuellen Abhaken statt erfundener Befunde.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Das Bildmodell ist über `MISTRAL_VISION_MODEL` konfigurierbar (Standard: `pixtral-12b-2409`).
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Spätere Veröffentlichung auf Vercel + Supabase
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Noch nicht veröffentlicht – auf Wunsch zunächst lokal fertiggestellt.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+1. In Supabase ein Projekt anlegen und `supabase/setup.sql` im SQL-Editor ausführen. Es erstellt eine private Tabelle und einen privaten Datei-Bucket.
+2. Das Projekt in ein eigenes Git-Repository übernehmen und in Vercel als Next.js-Projekt importieren. Falls das übergeordnete Repository verwendet wird, als Root Directory `outputs/saisonwissen` wählen.
+3. Folgende Server-Umgebungsvariablen in Vercel setzen:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ENCRYPTION_SECRET` (z. B. eine zufällige 32-Byte-Zeichenfolge; sicher aufbewahren)
+4. Optional Mistral-Modellvariablen setzen. Gäste der öffentlichen Demo sollen ihren eigenen Key verwenden. Ein gemeinsamer Key bleibt auf Vercel standardmäßig deaktiviert; `ALLOW_SHARED_DEMO_KEY=true` wäre ein bewusstes Opt-in und braucht zusätzliche globale Kostenkontrolle.
+5. Deployment starten und die Kernabläufe auf dem öffentlichen Link prüfen.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+**Keine dieser Variablen bekommt ein `NEXT_PUBLIC_`-Präfix.** Es gibt keinen Browserzugriff auf den Supabase-Service-Schlüssel. Die Demo-Tabelle hat keine Policies für öffentliche Clients; nur das Backend kann darauf zugreifen. Datenupdates verwenden eine Versionsprüfung gegen verlorene parallele Änderungen.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Lokale Demo-Daten werden nicht automatisch nach Supabase übertragen. Es wird dort ein neuer synthetischer Arbeitsbereich erzeugt. Die Anwendung verweigert auf Vercel den unbeständigen lokalen Dateispeicher, wenn Supabase fehlt.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Was bereits funktioniert
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+- Zwei verbundene Oberflächen mit responsive gestaltetem Buddy.
+- Drei Demorollen, serverseitig gefilterte Inhalte und Aktionen.
+- Wissensbeiträge, Prüfung, Freigabe und Versionshistorie.
+- Individuelle Prozessschritte, versionierte Durchläufe und gespeicherter Fortschritt.
+- Freie Fragen, Quellenkarten und Meldung von Wissenslücken.
+- Dokument- und Foto-Upload, private Downloads, PDF-/Text-Extraktion.
+- Mikrofonaufnahme mit maximal 60 Sekunden; Mistral-Transkription bei Verbindung.
+- Monatliche Prüfungen, Saisonabschluss und Saisonstart.
+- Punkte mit idempotenter Buchung und Beispielbelohnungen.
+- Verschlüsselte, austauschbare Mistral-Verbindung.
+- Zwei optionale WebMCP-Werkzeuge zum Lesen freigegebener Einträge und Öffnen eines Beitragsentwurfs.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Bewusste Grenzen
 
-## License
-For open source projects, say how it is licensed.
+- **Hackathon-Demo, kein Produktivsystem:** Der Rollenwechsel ist auf den isolierten synthetischen Demo-Betrieb begrenzt. Echte Benutzerkonten, Einladungen, Mandantenverwaltung und individuelle Wohnungszuweisungen sind noch nicht implementiert. Dafür vor echter Nutzung Supabase Auth und ein normalisiertes Berechtigungsmodell ergänzen.
+- Lokal persistente Dateien; für Hosting Supabase vorbereitet. Die Supabase-/Vercel-Veröffentlichung wurde mangels Einrichtung noch nicht ausgeführt oder getestet.
+- Echte Mistral-Antworten, OCR und Transkription sind implementiert, aber ohne vom Nutzer hinterlegten Key nicht live verifiziert.
+- Dokumente: maximal 8 MB, PDFs bis zu 15 Seiten und extrahierter Text bis 16.000 Zeichen. Keine DOCX-/Videoverarbeitung, keine Hintergrund-Job-Warteschlange. Bei Scan-PDFs wird Mistral OCR benötigt.
+- Prozessnavigation und Verwaltung sind überwiegend Deutsch; englische Beispielanleitungen und KI-Antworten werden unterstützt. Vollständige Übersetzung aller Verwaltungslabels ist nicht enthalten.
+- Die Quellenanzeigen öffnet das aktuelle Hauswissen; der laufende Prozess behält seinen beim Start gespeicherten Inhalt und seine Prozessversion. Prozesshistorie wird serverseitig bewahrt; eine eigene Historienansicht für Prozesse ist noch nicht enthalten.
+- Prüfbedarf wird beim Öffnen anhand von Daten berechnet; keine E-Mail-/Push-Erinnerungen. Belohnungen sind Demo-Anfragen, keine Auszahlungen.
+- Keine echten Buchungs-, Zahlungs-, Gästekarten- oder Notrufintegrationen.
+- 60 KI-Anfragen pro Demo-Arbeitsbereich/Tag. Vor öffentlicher gemeinsamer Key-Nutzung zusätzlich globale Limits und Bot-Schutz vorsehen.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Prüfungen
+
+```sh
+npm test
+node tests/api-smoke.mjs
+node tests/upload-smoke.mjs
+npm run build
+```
+
+Die beiden Schnittstellentests benötigen den laufenden lokalen Server und erstellen eigene synthetische Arbeitsbereiche. Produktionsbuild und Entwicklung sollten unterschiedliche Ausgabeverzeichnisse verwenden: `BUILD_CHECK=1 npm run build` baut nach `.next-check`, ohne die laufende Vorschau zu verändern.
+
+Geprüft wurden Rollenfilter, Freigabe und Versionierung, idempotente Punkte/Prüfungen, Durchlauf-Snapshots, echte lokale HTTP-Abläufe, TXT-/PDF-Verarbeitung sowie Browserbedienung auf Desktop- und Smartphone-Breite. Live-Mistral und öffentliches Hosting sind gesondert zu prüfen.

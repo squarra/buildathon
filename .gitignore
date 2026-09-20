@@ -1,3 +1,12 @@
 *.wav
-*.env.env
 .DS_Store
+
+# Local dependencies, builds and secrets
+node_modules/
+.next/
+.next-check/
+.data/
+.vercel/
+.env*
+!.env.example
+*.tsbuildinfo
