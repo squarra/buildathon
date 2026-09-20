@@ -1,6 +1,8 @@
-# Saisonwissen
+# SeasonUp
 
-Funktionsfähiger lokaler Hackathon-Prototyp für die saisonübergreifende Wissenspflege in kleinen Ferienwohnungsbetrieben. Synthetischer Betrieb: Ferienhaus Bergzeit, Tirol, drei Wohnungen.
+**Wissen bleibt im Haus.** Funktionsfähiger lokaler Hackathon-Prototyp für die saisonübergreifende Wissenspflege in kleinen Ferienwohnungsbetrieben. Synthetischer Betrieb: Haus Bergzeit, Tirol, drei Wohnungen (Alpenblick, Zirbennest, Talruhe).
+
+Der KI-Begleiter der Fachkräfte heißt **Wissensepp**. Er antwortet nur aus bestätigtem Hauswissen, nennt seine Quellen und sagt offen, wenn etwas fehlt.
 
 ## Lokal starten
 
@@ -28,12 +30,31 @@ Alternativ kann `MISTRAL_API_KEY` in `.env.local` hinterlegt werden. Modellnamen
 ## Eine Demo in drei Minuten
 
 1. **Betreiberin / Übersicht:** „Fenstergriff wurde repariert“ öffnen. Den gemeldeten Sachverhalt im Beispiel als geprüft annehmen, den endgültigen Text formulieren und veröffentlichen.
-2. **Mira / KI-Buddy:** Nach dem Fenstergriff im Alpenblick fragen. Die Antwort bzw. Textsuche zeigt die bestätigte Version mit Quelle. Zahlungsinformationen sind für diese Rolle ausgeblendet.
-3. **Prozess starten:** „Gästewechsel & Reinigung“ starten, einen Schritt erledigen und über „Problem melden“ Feedback einreichen. Nach Neuladen lässt sich der Durchlauf fortsetzen.
-4. **Lena / Wissenspflege:** Monatlichen Eintrag prüfen. Im Saisonabschluss Notizen und offene Meldungen in einen bearbeitbaren Übergabeentwurf übernehmen. Neue Saison festlegen und Einträge dafür bestätigen.
-5. **Mira / Anerkennung:** Bestätigte hilfreiche Beiträge bringen Punkte. Einen Demo-Kaffeegutschein anfragen; Lena kann die Anfrage bestätigen.
+2. **Mira / Wissensepp:** Nach dem Fenstergriff im Alpenblick fragen. Die Antwort bzw. Textsuche zeigt die bestätigte Version mit Quelle. Zahlungsinformationen sind für diese Rolle ausgeblendet.
+3. **Zimmer-Check:** Als Mira „Gästewechsel & Reinigung" starten. Im Schritt „Bad und Oberflächen" ein Foto des Raums aufnehmen. Die KI vergleicht es mit dem hinterlegten Idealbild und den Prüfpunkten und nennt, was noch fehlt – etwa eine fehlende Ersatzrolle. Danach nachbessern und ein neues Foto machen. Ein unpassender Prüfpunkt lässt sich direkt als Beitrag melden.
+4. **Prozess starten:** „Gästewechsel & Reinigung“ starten, einen Schritt erledigen und über „Problem melden“ Feedback einreichen. Nach Neuladen lässt sich der Durchlauf fortsetzen.
+5. **Lena / Wissenspflege:** Monatlichen Eintrag prüfen. Im Saisonabschluss Notizen und offene Meldungen in einen bearbeitbaren Übergabeentwurf übernehmen. Neue Saison festlegen und Einträge dafür bestätigen.
+6. **Mira / Anerkennung:** Bestätigte hilfreiche Beiträge bringen Punkte. Einen Demo-Kaffeegutschein anfragen; Lena kann die Anfrage bestätigen.
 
 Beispielprozesse lassen sich über „Prozesse“ bearbeiten und erweitern. Neue Wissenseinträge beginnen als Beiträge. PDFs, TXT, Markdown, Fotos und Audio lassen sich einem Beitrag hinzufügen. Anhänge bleiben nach Freigabe mit dem Wissen verknüpft.
+
+## Zimmer-Check: visuelle Qualitätskontrolle
+
+Die Betreiberin legt unter „Zimmer-Check" pro Raum einen **Sicht-Standard** an: ein Idealbild des perfekt vorbereiteten Raums plus prüfbare Punkte („Ersatzrolle Toilettenpapier sichtbar bereitgestellt"). Mit Mistral-Verbindung schlägt die KI diese Punkte aus dem Idealbild vor; sie bleiben bearbeitbar.
+
+Die Fachkraft fotografiert den fertigen Raum – im Buddy direkt im passenden Prozessschritt oder über die Liste „Zimmer-Check". Serverseitig vergleicht ein Bildmodell das Foto mit Idealbild und Checkliste und gibt eine Hinweisliste zurück. Fotos werden vor dem Upload im Browser auf 1280 px verkleinert.
+
+Das Feature hängt an den bestehenden Abläufen:
+
+- **Prozesse:** Ein Sicht-Standard lässt sich an einen Prozessschritt hängen und erscheint dort automatisch.
+- **Beiträge:** Jeder Befund kann als Änderungsvorschlag gemeldet werden; das geprüfte Foto bleibt am Beitrag sichtbar.
+- **Wissenspflege:** Idealbilder laufen im monatlichen Check-in und zum Saisonstart mit („Sieht der Raum heute noch so aus?"). Änderungen legen eine neue Version mit Historie an.
+- **Saisonübergabe:** Wiederkehrende offene Befunde fließen in den Übergabeentwurf ein.
+- **Anerkennung:** Ein bestandener Check und eine bestätigte Standard-Prüfung geben je 2 Punkte.
+
+Die KI beurteilt ausschließlich sichtbare Details und markiert nicht Erkennbares ausdrücklich als „auf dem Foto nicht zu sehen". Die Freigabe trifft immer ein Mensch. Ohne Mistral-Verbindung zeigt der Check die Prüfpunkte klar gekennzeichnet zum manuellen Abhaken statt erfundener Befunde.
+
+Das Bildmodell ist über `MISTRAL_VISION_MODEL` konfigurierbar (Standard: `pixtral-12b-2409`).
 
 ## Spätere Veröffentlichung auf Vercel + Supabase
 
