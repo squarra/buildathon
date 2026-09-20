@@ -1,0 +1,10 @@
+import type {Role,Step} from '../types';
+export type Tone='bed'|'service'|'living';
+export type Point={x:number;y:number};
+export type FloorPlan={id:string;unit:string;title:string;width:number;height:number;geometry:string};
+export type Room={id:string;floorPlanId:string;name:string;tone:Tone;polygon:[number,number][];label:Point};
+export type Pin={id:string;floorPlanId:string;roomId:string;number:number;name:string;x:number;y:number;processIds:string[]};
+export type GuidanceSession={id:string;pinId:string;processId:string;processVersion:number;role:Role;title:string;minutes?:number;steps:Step[];step:number;status:'active'|'done';exited?:boolean;started:string;finished?:string};
+export type Feedback={id:string;sessionId:string;pinId:string;processId:string;role:Role;comment:string;created:string};
+export type SpatialState={floorPlans:FloorPlan[];rooms:Room[];pins:Pin[];guidance:GuidanceSession[];feedback:Feedback[]};
+export type PinDraft={id?:string;name:string;x:number;y:number;processIds:string[]};

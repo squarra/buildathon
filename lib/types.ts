@@ -1,9 +1,11 @@
+import type {SpatialState} from './spatial/types';
 export type Role = 'owner' | 'staff' | 'cleaner';
 export type Entry = {id:string;title:string;body:string;category:string;unit:string;roles:Role[];version:number;verified:string;season:string;due:string;owner:string;archived?:boolean;attachments?:{id:string;name:string;type:string}[];history:{version:number;body:string;date:string}[]};
-export type Step={id:string;title:string;body:string;titleEn?:string;bodyEn?:string;entryIds:string[]};
-export type Process={id:string;title:string;description:string;category:string;roles:Role[];steps:Step[];version:number;history?:{version:number;steps:Step[];date:string}[]};
+export type Step={id:string;title:string;body:string;caution?:string;titleEn?:string;bodyEn?:string;entryIds:string[]};
+export type Process={id:string;title:string;description:string;category:string;roles:Role[];steps:Step[];minutes?:number;version:number;history?:{version:number;steps:Step[];date:string}[]};
 export type Contribution={id:string;title:string;body:string;entryId?:string;processId?:string;stepId?:string;processVersion?:number;unit:string;author:Role;status:'open'|'approved'|'rejected';created:string;attachment?:{id:string;name:string;type:string};resolution?:string};
 export type Run={id:string;processId:string;title:string;unit:string;role:Role;version:number;steps:Step[];done:string[];created:string;completed?:string};
-export type State={entries:Entry[];processes:Process[];contributions:Contribution[];runs:Run[];ledger:{id:string;role:Role;points:number;reason:string;date:string}[];rewards:{id:string;role:Role;title:string;cost:number;status:'requested'|'approved'}[];checks:{id:string;entryId:string;period:string;date:string}[];handover:{notes:string;summary:string;status:'draft'|'approved';date:string};season:string;settings:{keyCipher?:string;calls:number;day:string}};
+export type State={entries:Entry[];processes:Process[];contributions:Contribution[];runs:Run[];ledger:{id:string;role:Role;points:number;reason:string;date:string}[];rewards:{id:string;role:Role;title:string;cost:number;status:'requested'|'approved'}[];checks:{id:string;entryId:string;period:string;date:string}[];handover:{notes:string;summary:string;status:'draft'|'approved';date:string};season:string;settings:{keyCipher?:string;calls:number;day:string}}&SpatialState;
 export const units=['Alle Wohnungen','Alpenblick','Zirbennest','Talruhe'];
 export const roleNames:Record<Role,string>={owner:'Betreiberin',staff:'Mitarbeiter',cleaner:'Reinigungskraft'};
+export type ClientState=Omit<State,'settings'|'handover'>&{settings:{hasKey:boolean;calls:number};handover:State['handover']|null};
